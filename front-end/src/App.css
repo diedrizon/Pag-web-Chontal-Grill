@@ -1,0 +1,33 @@
+.navbar-logo {
+  width: 80px;  /* Aumentamos el tamaño del logo */
+  height: auto;
+  margin-right: 20px; /* Más espacio a la derecha del logo */
+}
+
+.navbar-color {
+  background-color: #2b18d6; /* Un fondo más oscuro para un aspecto más elegante */
+  border-bottom: 3px solid #ff9633; /* Una línea naranja en la parte inferior para un toque de color */
+}
+
+/* Efectos de hover para los enlaces del encabezado */
+.navbar-color .navbar-nav .nav-link {
+  color: #fff; /* Color blanco para los enlaces */
+  transition: color 0.3s; /* Transición suave para los efectos de hover */
+}
+
+.navbar-color .navbar-nav .nav-link:hover {
+  color: #ff9633; /* Color naranja al pasar el mouse sobre los enlaces */
+}
+
+/* Ajustes para el botón del menú lateral */
+.navbar-color .btn-outline-light {
+  border-color: #ff9633; /* Borde naranja para el botón */
+  color: #ff9633; /* Texto naranja para el botón */
+}
+
+.navbar-color .btn-outline-light:hover {
+  background-color: #ff9633; /* Fondo naranja al pasar el mouse sobre el botón */
+  color: #333; /* Texto oscuro al pasar el mouse sobre el botón */
+}
+
+
