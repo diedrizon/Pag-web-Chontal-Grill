@@ -1,22 +1,47 @@
-import logo from './assets/images/LogoPNG.png'; // Asegúrate de ajustar la ruta según donde hayas puesto tu logo
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import logo from './assets/images/LogoPNG.png';
+import './styles/App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Body from './components/Body';
+import Login from './pages/Login';
+import AdminHeader from './components/AdminHeader';
 
+function MainContent() {
+  let location = useLocation();
 
+  const specialPages = ['/login', '/Administrador'];
+  const isSpecialPage = specialPages.includes(location.pathname);
 
-function App() {
   return (
-    <div className="app-container">
-      <Header />
-      <div className="logo-container">
-        <img src={logo} alt="Logo Chontal Grill" />
+      <div className="app-container">
+          {!isSpecialPage && <Header />}
+    
+          {!isSpecialPage && (
+              <div className="logo-container">
+                  <img src={logo} alt="Logo Chontal Grill" />
+              </div>
+          )}
+
+          <Routes>
+              <Route path="/" element={<Body />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/Administrador" element={<AdminHeader />} />
+          </Routes>
+
+          {!isSpecialPage && <Footer />}
       </div>
-      <Footer /> {/* Aquí agregamos el pie de página */}
-    </div>
   );
 }
 
 
-export default App;
+function App() {
+    return (
+        <Router>
+            <MainContent />
+        </Router>
+    );
+}
 
+export default App;

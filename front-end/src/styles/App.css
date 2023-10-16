@@ -5,7 +5,7 @@
 }
 
 .navbar-color {
-  background-color: #2b18d6; /* Un fondo más oscuro para un aspecto más elegante */
+  background-color: #1437d3; /* Un fondo más oscuro para un aspecto más elegante */
   border-bottom: 3px solid #ff9633; /* Una línea naranja en la parte inferior para un toque de color */
 }
 
@@ -31,3 +31,21 @@
 }
 
 
+/* Estilos para el botón "Personal Autorizado" */
+.navbar-color .btn-personal-autorizado {
+  background-color: #ff9633; /* Fondo naranja para el botón */
+  border-color: #ff9633; /* Borde naranja para el botón */
+  color: #fff; /* Texto blanco para el botón */
+}
+
+.navbar-color .btn-personal-autorizado:hover {
+  background-color: #333; /* Fondo oscuro al pasar el mouse sobre el botón */
+  border-color: #333; /* Borde oscuro al pasar el mouse sobre el botón */
+  color: #fff; /* Texto blanco al pasar el mouse sobre el botón */
+}
+
+.navbar-logo-small {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+}
