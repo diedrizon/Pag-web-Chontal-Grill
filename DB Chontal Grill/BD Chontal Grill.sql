@@ -1,5 +1,18 @@
 USE chontal_grill;
 
+
+
+-- Luego, crear la tabla Autenticacion_Empleado
+CREATE TABLE `Autenticacion_Empleado` (
+   `ID_Autenticacion` INT AUTO_INCREMENT PRIMARY KEY,
+   `ID_Empleado` INT,
+   `Correo` VARCHAR(50) CHARACTER SET UTF8MB4,
+   `Contraseña` VARCHAR(255),
+   FOREIGN KEY (`ID_Empleado`) REFERENCES `Empleado` (`ID_Empleado`),
+   FOREIGN KEY (`Correo`) REFERENCES `Empleado` (`Correo`)
+);
+
+
 CREATE TABLE `Categoria` (
   `ID_Categoria` INT AUTO_INCREMENT PRIMARY KEY,
   `Nombre` VARCHAR(50)
@@ -74,8 +87,6 @@ CREATE TABLE `Comentarios` (
   `Calificacion` INT,
   `Fecha` DATETIME
 );
-
-
 
 
 

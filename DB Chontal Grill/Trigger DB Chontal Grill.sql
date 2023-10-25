@@ -23,8 +23,10 @@ CREATE TRIGGER after_insert_categoria
 AFTER INSERT ON Categoria
 FOR EACH ROW
 BEGIN
-    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla, ID_Registro_afectado, Valores_Nuevos)
-    VALUES ('INSERT', CURRENT_USER(), NOW(), 'Categoria', NEW.ID_Categoria, CONCAT('Nombre: ', NEW.Nombre));
+    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla, 
+    ID_Registro_afectado, Valores_Nuevos)
+    VALUES ('INSERT', CURRENT_USER(), NOW(), 'Categoria', NEW.ID_Categoria, 
+    CONCAT('Nombre: ', NEW.Nombre));
 END;
 //
 
@@ -32,8 +34,10 @@ CREATE TRIGGER after_update_categoria
 AFTER UPDATE ON Categoria
 FOR EACH ROW
 BEGIN
-    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla, ID_Registro_afectado, Valores_Antiguos, Valores_Nuevos)
-    VALUES ('UPDATE', CURRENT_USER(), NOW(), 'Categoria', NEW.ID_Categoria, CONCAT('Nombre: ', OLD.Nombre), CONCAT('Nombre: ', NEW.Nombre));
+    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla, ID_Registro_afectado,
+     Valores_Antiguos, Valores_Nuevos)
+    VALUES ('UPDATE', CURRENT_USER(), NOW(), 'Categoria', NEW.ID_Categoria, 
+    CONCAT('Nombre: ', OLD.Nombre), CONCAT('Nombre: ', NEW.Nombre));
 END;
 //
 
@@ -41,8 +45,10 @@ CREATE TRIGGER after_delete_categoria
 AFTER DELETE ON Categoria
 FOR EACH ROW
 BEGIN
-    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla, ID_Registro_afectado, Valores_Antiguos)
-    VALUES ('DELETE', CURRENT_USER(), NOW(), 'Categoria', OLD.ID_Categoria, CONCAT('Nombre: ', OLD.Nombre));
+    INSERT INTO Bitacora (Trasaccion, Usuario, Fecha, Tabla,
+     ID_Registro_afectado, Valores_Antiguos)
+    VALUES ('DELETE', CURRENT_USER(), NOW(), 'Categoria',
+     OLD.ID_Categoria, CONCAT('Nombre: ', OLD.Nombre));
 END;
 //
 DELIMITER ;

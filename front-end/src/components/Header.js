@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Asegúrate de importar Link
+import { Link } from 'react-router-dom';  // Ya has importado Link
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -26,12 +26,12 @@ function Header() {
                   </Navbar.Brand>
                   <Navbar.Collapse id="basic-navbar-nav">
                       <Nav className="mr-auto">
-                          <Nav.Link href="#home">Inicio</Nav.Link>
-                          <Nav.Link href="#menu">Menú</Nav.Link>
-                          <Nav.Link href="#reservaciones">Reservaciones</Nav.Link>
-                          <Nav.Link href="#orden">Orden en línea</Nav.Link>
-                          <Nav.Link href="#comentarios">Comentarios</Nav.Link>
-                          <Nav.Link href="#contacto">Contacto</Nav.Link>
+                          <Link className="nav-link" to="/home">Inicio</Link>
+                          <Link className="nav-link" to="/menu">Menú</Link>
+                          <Link className="nav-link" to="/reservaciones">Reservaciones</Link>
+                          <Link className="nav-link" to="/orden">Orden en línea</Link>
+                          <Link className="nav-link" to="/comentarios">Comentarios</Link>
+                          <Link className="nav-link" to="/contacto">Contacto</Link>
                       </Nav>
                       {/* Botón "Personal Autorizado" en la parte derecha */}
                       <Link to="/login">
@@ -61,12 +61,12 @@ function Header() {
               </Offcanvas.Header>
               <Offcanvas.Body>
                   <Nav className="flex-column">
-                      <Nav.Link href="#home">Inicio</Nav.Link>
-                      <Nav.Link href="#menu">Menú</Nav.Link>
-                      <Nav.Link href="#reservaciones">Reservaciones</Nav.Link>
-                      <Nav.Link href="#orden">Orden en línea</Nav.Link>
-                      <Nav.Link href="#comentarios">Comentarios</Nav.Link>
-                      <Nav.Link href="#contacto">Contacto</Nav.Link>
+                      <Link className="nav-link" to="/home">Inicio</Link>
+                      <Link className="nav-link" to="/menu">Menú</Link>
+                      <Link className="nav-link" to="/reservaciones">Reservaciones</Link>
+                      <Link className="nav-link" to="/orden">Orden en línea</Link>
+                      <Link className="nav-link" to="/comentarios">Comentarios</Link>
+                      <Link className="nav-link" to="/contacto">Contacto</Link>
                   </Nav>
               </Offcanvas.Body>
           </Offcanvas>

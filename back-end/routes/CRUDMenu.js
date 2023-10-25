@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+
 module.exports = (db) => {
+
   router.get('/read', (req, res) => {
-    const sql = 'SELECT * FROM Menu';
+    const sql = 'SELECT *, TO_BASE64(Imagen) as ImagenBase64 FROM Menu';
     db.query(sql, (err, result) => {
       if (err) {
         console.error('Error al leer registros:', err);
@@ -13,24 +15,10 @@ module.exports = (db) => {
       }
     });
   });
-  //Invoke-RestMethod -Uri "http://localhost:5000/menu/read" -Method GET
-
-
-
-
-
-
-
 
   router.post('/create', (req, res) => {
     const { ID_Categoria, Nombre, Descripcion, Precio, Imagen } = req.body;
-    if (!ID_Categoria || !Nombre || !Descripcion || !Precio || !Imagen) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-    const sql = `
-      INSERT INTO Menu (ID_Categoria, Nombre, Descripcion, Precio, Imagen)
-      VALUES (?, ?, ?, ?, ?)
-    `;
+    const sql = `INSERT INTO Menu (ID_Categoria, Nombre, Descripcion, Precio, Imagen) VALUES (?, ?, ?, ?, FROM_BASE64(?))`;
     const values = [ID_Categoria, Nombre, Descripcion, Precio, Imagen];
     db.query(sql, values, (err, result) => {
       if (err) {
@@ -42,24 +30,10 @@ module.exports = (db) => {
     });
   });
 
-  //Invoke-RestMethod -Uri "http://localhost:5000/menu/create" -Method POST -ContentType "application/json" -Body '{"ID_Categoria": 1, "Nombre": "Nuevo Menú", "Descripcion": "Descripción del menú", "Precio": 10.99, "Imagen": "base64_de_tu_imagen_aqui"}'
-
-
-
-
-  
-
   router.put('/update/:id', (req, res) => {
     const ID_Menu = req.params.id;
     const { ID_Categoria, Nombre, Descripcion, Precio, Imagen } = req.body;
-    if (!ID_Categoria || !Nombre || !Descripcion || !Precio || !Imagen) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-    }
-    const sql = `
-      UPDATE Menu
-      SET ID_Categoria = ?, Nombre = ?, Descripcion = ?, Precio = ?, Imagen = ?
-      WHERE ID_Menu = ?
-    `;
+    const sql = `UPDATE Menu SET ID_Categoria = ?, Nombre = ?, Descripcion = ?, Precio = ?, Imagen = FROM_BASE64(?) WHERE ID_Menu = ?`;
     const values = [ID_Categoria, Nombre, Descripcion, Precio, Imagen, ID_Menu];
     db.query(sql, values, (err, result) => {
       if (err) {
@@ -70,15 +44,6 @@ module.exports = (db) => {
       }
     });
   });
-
-  //Invoke-RestMethod -Uri "http://localhost:5000/menu/update/1" -Method PUT -ContentType "application/json" -Body '{"ID_Categoria": 2, "Nombre": "Menú Actualizado", "Descripcion": "Descripción actualizada", "Precio": 12.99, "Imagen": "base64_de_tu_nueva_imagen_aqui"}'
-
-
-
-
-
-
-
 
   router.delete('/delete/:id', (req, res) => {
     const ID_Menu = req.params.id;
@@ -94,10 +59,6 @@ module.exports = (db) => {
   });
 
   return router;
-};
-//Invoke-RestMethod -Uri "http://localhost:5000/menu/delete/1" -Method DELETE
-
-
-
+}
 
 

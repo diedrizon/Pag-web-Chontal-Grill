@@ -1,0 +1,66 @@
+/* Archivo: styles.css */
+
+/* Estilos Generales */
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+/* Estilos para la Card */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* Estilos para el Formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control, .form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Estilos para la Tabla */
+.table {
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    text-align: left;
+    padding: 15px;
+}
+
+.table thead th {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+/* Estilos para los Botones */
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Estilos para InputMask (Teléfono) */
+.inputmask {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+}
