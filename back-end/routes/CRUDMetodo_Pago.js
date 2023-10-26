@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (db) => {
-  
+
   // READ
   router.get('/read', (req, res) => {
-    const sql = 'SELECT * FROM Tipo_Orden';
+    const sql = 'SELECT * FROM `Metodo de Pago`';
     db.query(sql, (err, result) => {
       if (err) {
         console.error('Error al leer registros:', err);
@@ -16,18 +16,20 @@ module.exports = (db) => {
     });
   });
 
-  // Create
+  // CREATE
   router.post('/create', (req, res) => {
-    const { Tipo, Descripcion, Nota_Especial, Numero_Mesa, Direccion } = req.body;
-    if (!Tipo) {
-      return res.status(400).json({ error: 'El campo Tipo es obligatorio' });
+    const { Descripcion } = req.body;
+
+    if (!Descripcion) {
+      return res.status(400).json({ error: 'El campo Descripcion es obligatorio' });
     }
+
     const sql = `
-      INSERT INTO Tipo_Orden (Tipo, Descripcion, Nota_Especial, Numero_Mesa, Direccion)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO \`Metodo de Pago\` (Descripcion)
+      VALUES (?)
     `;
-    const values = [Tipo, Descripcion || null, Nota_Especial || null, Numero_Mesa || null, Direccion || null];
-    db.query(sql, values, (err, result) => {
+
+    db.query(sql, [Descripcion], (err, result) => {
       if (err) {
         console.error('Error al insertar registro:', err);
         res.status(500).json({ error: 'Error al insertar registro' });
@@ -37,20 +39,22 @@ module.exports = (db) => {
     });
   });
 
-  // Update
+  // UPDATE
   router.put('/update/:id', (req, res) => {
-    const Id_Tipo_Orden = req.params.id;
-    const { Tipo, Descripcion, Nota_Especial, Numero_Mesa, Direccion } = req.body;
-    if (!Tipo) {
-      return res.status(400).json({ error: 'El campo Tipo es obligatorio' });
+    const ID_Metodo_Pago = req.params.id;
+    const { Descripcion } = req.body;
+
+    if (!Descripcion) {
+      return res.status(400).json({ error: 'El campo Descripcion es obligatorio' });
     }
+
     const sql = `
-      UPDATE Tipo_Orden
-      SET Tipo = ?, Descripcion = ?, Nota_Especial = ?, Numero_Mesa = ?, Direccion = ?
-      WHERE Id_Tipo_Orden = ?
+      UPDATE \`Metodo de Pago\`
+      SET Descripcion = ?
+      WHERE ID_Metodo_Pago = ?
     `;
-    const values = [Tipo, Descripcion || null, Nota_Especial || null, Numero_Mesa || null, Direccion || null, Id_Tipo_Orden];
-    db.query(sql, values, (err, result) => {
+
+    db.query(sql, [Descripcion, ID_Metodo_Pago], (err, result) => {
       if (err) {
         console.error('Error al actualizar el registro:', err);
         res.status(500).json({ error: 'Error al actualizar el registro' });
@@ -60,11 +64,11 @@ module.exports = (db) => {
     });
   });
 
-  // Delete
+  // DELETE
   router.delete('/delete/:id', (req, res) => {
-    const Id_Tipo_Orden = req.params.id;
-    const sql = 'DELETE FROM Tipo_Orden WHERE Id_Tipo_Orden = ?';
-    db.query(sql, [Id_Tipo_Orden], (err, result) => {
+    const ID_Metodo_Pago = req.params.id;
+    const sql = 'DELETE FROM `Metodo de Pago` WHERE ID_Metodo_Pago = ?';
+    db.query(sql, [ID_Metodo_Pago], (err, result) => {
       if (err) {
         console.error('Error al eliminar el registro:', err);
         res.status(500).json({ error: 'Error al eliminar el registro' });

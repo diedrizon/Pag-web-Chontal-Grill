@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Ya has importado Link
+import { Link } from 'react-router-dom'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -17,7 +17,7 @@ function Header() {
 
   return (
       <div>
-          {/* Navbar principal */}
+
           <Navbar className="navbar-color" variant="dark" expand="md">
               <Container>
                   <Navbar.Brand>
@@ -33,7 +33,7 @@ function Header() {
                           <Link className="nav-link" to="/comentarios">Comentarios</Link>
                           <Link className="nav-link" to="/contacto">Contacto</Link>
                       </Nav>
-                      {/* Botón "Personal Autorizado" en la parte derecha */}
+
                       <Link to="/login">
                           <Button
                               variant="outline-light"
@@ -43,18 +43,17 @@ function Header() {
                           </Button>
                       </Link>
                   </Navbar.Collapse>
-                  {/* Botón para mostrar/ocultar el menú lateral */}
+
                   <Button
                       variant="outline-light"
                       onClick={toggleMenu}
-                      className="d-md-none" // Solo para dispositivos móviles
+                      className="d-md-none" 
                   >
                       Menú
                   </Button>
               </Container>
           </Navbar>
 
-          {/* Menú lateral (Offcanvas) */}
           <Offcanvas show={showMenu} onHide={toggleMenu} placement="start">
               <Offcanvas.Header closeButton>
                   <Offcanvas.Title>Menú</Offcanvas.Title>

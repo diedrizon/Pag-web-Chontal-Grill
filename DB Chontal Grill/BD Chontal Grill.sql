@@ -41,9 +41,15 @@ CREATE TABLE `Orden` (
   `Id_Tipo_Orden` INT,
   `Monto` DECIMAL(6, 2),
   `Estado` VARCHAR(50),
-  `Modo_Pago` VARCHAR(100),
-  `Fecha_Hora` DATETIME
+  `Fecha_Hora` DATETIME,
+   `ID_Metodo_Pago` INT
 );
+
+CREATE TABLE `Metodo de Pago` (
+  `ID_Metodo_Pago` INT AUTO_INCREMENT PRIMARY KEY,
+  `Descripcion` VARCHAR(100)
+);
+
 
 CREATE TABLE `Empleado` (
   `ID_Empleado` INT AUTO_INCREMENT PRIMARY KEY,
@@ -74,11 +80,14 @@ CREATE TABLE `Reservacion` (
 
 CREATE TABLE `Tipo_Orden` (
   `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
-  `Nombre` VARCHAR(16),
+  `Tipo` ENUM('Local', 'Domicilio'),
   `Descripcion` VARCHAR(255),
   `Nota_Especial` VARCHAR(200),
-  `Domicilio` VARCHAR(100)
+  `Numero_Mesa` INT DEFAULT NULL,
+  `Direccion` VARCHAR(255) DEFAULT NULL
 );
+
+
 
 CREATE TABLE `Comentarios` (
   `ID_Comentarios` INT AUTO_INCREMENT PRIMARY KEY,
