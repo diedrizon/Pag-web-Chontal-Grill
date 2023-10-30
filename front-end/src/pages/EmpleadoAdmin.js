@@ -5,7 +5,6 @@ import "../styles/EmpleadoAdmin.css";
 import AdminHeader from "../components/AdminHeader";
 import "../styles/CategoriaAdmin.css";
 
-
 function VisualizarEmpleado() {
   const [empleados, setEmpleados] = useState([]);
   const [nombres, setNombres] = useState("");
@@ -15,6 +14,8 @@ function VisualizarEmpleado() {
   const [cargo, setCargo] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [idSeleccionado, setIdSeleccionado] = useState(null);
+  const [busqueda, setBusqueda] = useState("");
+
   useEffect(() => {
     obtenerEmpleados();
   }, []);
@@ -134,6 +135,14 @@ function VisualizarEmpleado() {
     }
   };
 
+  const empleadosFiltrados = empleados.filter(
+    (empleado) =>
+      empleado.Nombres.toLowerCase().includes(busqueda.toLowerCase()) ||
+      empleado.Apellidos.toLowerCase().includes(busqueda.toLowerCase()) ||
+      empleado.Correo.toLowerCase().includes(busqueda.toLowerCase()) ||
+      empleado.Cargo.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
   return (
     <div>
       <AdminHeader />
@@ -150,11 +159,13 @@ function VisualizarEmpleado() {
                 value={nombres}
                 onChange={(e) => setNombres(e.target.value)}
                 placeholder="Nombres"
+                className="mt-2 mb-2"
               />
               <Form.Control
                 value={apellidos}
                 onChange={(e) => setApellidos(e.target.value)}
                 placeholder="Apellidos"
+                className="mt-2 mb-2"
               />
               <InputMask
                 mask="9999-9999"
@@ -162,13 +173,16 @@ function VisualizarEmpleado() {
                 onChange={(e) => setTelefono(e.target.value)}
                 className="form-control"
                 placeholder="Teléfono"
+                classsName="mt-2 mb-2"
               />
               <Form.Control
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="Correo"
+                className="mt-2 mb-2"
               />
               <Form.Select
+                className="mt-2 mb-2"
                 aria-label="Cargo"
                 value={cargo}
                 onChange={(e) => setCargo(e.target.value)}
@@ -187,6 +201,15 @@ function VisualizarEmpleado() {
               </Button>
             </Form.Group>
 
+            <Form.Group className="mt-3">
+              <Form.Label>Buscar Empleado</Form.Label>
+              <Form.Control
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar por nombre, apellido, correo o cargo"
+              />
+            </Form.Group>
+
             <Table striped bordered hover className="mt-3">
               <thead>
                 <tr>
@@ -200,7 +223,7 @@ function VisualizarEmpleado() {
                 </tr>
               </thead>
               <tbody>
-                {empleados.map((empleado) => (
+                {empleadosFiltrados.map((empleado) => (
                   <tr key={empleado.ID_Empleado}>
                     <td>{empleado.ID_Empleado}</td>
                     <td>{empleado.Nombres}</td>
@@ -210,7 +233,7 @@ function VisualizarEmpleado() {
                     <td>{empleado.Cargo}</td>
                     <td>
                       <Button
-                        className="button-margin"
+                        className="mt-2 mb-2"
                         onClick={() => handleEditar(empleado)}
                       >
                         Editar

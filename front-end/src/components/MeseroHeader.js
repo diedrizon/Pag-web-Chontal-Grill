@@ -9,14 +9,14 @@ import Container from 'react-bootstrap/Container';
 
 function MeseroHeader() {
     const [showMenu, setShowMenu] = useState(false);
-    const [showOrdenes, setShowOrdenes] = useState(false);  // Nuevo estado para Ordenes
+    const [showOrdenes, setShowOrdenes] = useState(false);
 
     const toggleMenu = () => {
-        if (!showMenu) setShowOrdenes(false);  // Añadir esto
+        if (!showMenu) setShowOrdenes(false);
         setShowMenu(!showMenu);
     };
 
-    const handleOrdenesClick = () => {  // Nuevo manejador para Ordenes
+    const handleOrdenesClick = () => {
         if (!showOrdenes) setShowMenu(false);
         setShowOrdenes(true);
     };
@@ -33,8 +33,9 @@ function MeseroHeader() {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
                             <Nav.Link href="#home" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Inicio</Nav.Link>
-                            <Link to="/menu" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Menú</Link>
-                            <Nav.Link href="#ordenes" onClick={handleOrdenesClick}>Ordenes</Nav.Link>  {/* Nuevo enlace para Ordenes */}
+                            <Link to="/menutext" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Menú</Link>
+                            <Nav.Link href="#ordenes" onClick={handleOrdenesClick}>Ordenes</Nav.Link>
+                            <Link to="/TipoOrden" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Tipo de Orden</Link>  {/* Nuevo enlace para Tipo de Orden */}
                         </Nav>
                         <Button
                             variant="outline-light"
@@ -56,8 +57,9 @@ function MeseroHeader() {
                 <Offcanvas.Body>
                     <Nav className="flex-column">
                         <Nav.Link href="#home" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Inicio</Nav.Link>
-                        <Link to="/menu" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Menú</Link>
-                        <Nav.Link href="#ordenes" onClick={handleOrdenesClick}>Ordenes</Nav.Link>  {/* Nuevo enlace para Ordenes */}
+                        <Link to="/menutext" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Menú</Link>
+                        <Nav.Link href="#ordenes" onClick={handleOrdenesClick}>Ordenes</Nav.Link>
+                        <Link to="/TipoOrden" className="nav-link" onClick={() => { setShowMenu(false); setShowOrdenes(false); }}>Tipo de Orden</Link>  {/* Nuevo enlace para Tipo de Orden */}
                     </Nav>
                 </Offcanvas.Body>
             </Offcanvas>

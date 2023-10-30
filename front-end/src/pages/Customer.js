@@ -3,12 +3,16 @@ import { Table, Button, Container, Card, Form } from "react-bootstrap";
 import AdminHeader from "../components/AdminHeader";
 import "../styles/CategoriaAdmin.css";
 
+
+import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+
 function VisualizarCategoria() {
   const [categorias, setCategorias] = useState([]);
   const [nombre, setNombre] = useState(""); // Para agregar
   const [nombreBusqueda, setNombreBusqueda] = useState(""); // Para buscar
   const [nombreSeleccionado, setNombreSeleccionado] = useState(""); // Para editar
   const [idSeleccionado, setIdSeleccionado] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // Nuevo estado para controlar el modo
 
   useEffect(() => {
     obtenerCategorias();
@@ -42,6 +46,8 @@ function VisualizarCategoria() {
         alert("Categoría agregada con éxito");
         setNombre("");
         obtenerCategorias();
+        setIsEditing(false);
+
       } else {
         alert("Error al agregar la categoría");
       }
@@ -72,6 +78,7 @@ function VisualizarCategoria() {
         obtenerCategorias();
         setIdSeleccionado(null);
         setNombreSeleccionado("");
+        setIsEditing(false);
       } else {
         alert("Error al actualizar la categoría");
       }
@@ -105,6 +112,7 @@ function VisualizarCategoria() {
   const categoriasFiltradas = categorias.filter((categoria) =>
     categoria.Nombre.toLowerCase().includes(nombreBusqueda.toLowerCase())
   );
+  
 
   return (
     <div>
@@ -115,14 +123,14 @@ function VisualizarCategoria() {
             <Card.Title>Gestión de Categorías</Card.Title>
 
             <Form.Group>
-              <Form.Label>Agregar Categoría</Form.Label>
+              <Form.Label>{isEditing ? 'Editar Categoría' : 'Agregar Categoría'}</Form.Label>
               <Form.Control
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
+                value={isEditing ? nombreSeleccionado : nombre}
+                onChange={(e) => isEditing ? setNombreSeleccionado(e.target.value) : setNombre(e.target.value)}
                 placeholder="Nombre de la categoría"
               />
-              <Button className="mt-2" onClick={handleAgregar}>
-                Agregar
+              <Button className="mt-2" onClick={isEditing ? handleActualizar : handleAgregar}>
+                {isEditing ? <FaEdit /> : <FaPlus />} {isEditing ? 'Actualizar' : 'Agregar'}
               </Button>
             </Form.Group>
 
@@ -154,36 +162,23 @@ function VisualizarCategoria() {
                         onClick={() => {
                           setIdSeleccionado(categoria.ID_Categoria);
                           setNombreSeleccionado(categoria.Nombre);
+                          setIsEditing(true);
                         }}
                       >
-                        Editar
+                        <FaEdit /> Editar
                       </Button>
                       <Button
                         variant="danger"
                         className="button-margin"
                         onClick={() => handleEliminar(categoria.ID_Categoria)}
                       >
-                        Eliminar
+                        <FaTrash /> Eliminar
                       </Button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
-
-            {idSeleccionado && (
-              <div className="mt-3">
-                <Form.Label>Editar Categoría</Form.Label>
-                <Form.Control
-                  value={nombreSeleccionado}
-                  onChange={(e) => setNombreSeleccionado(e.target.value)}
-                  placeholder="Nombre de la categoría"
-                />
-                <Button className="mt-2" onClick={handleActualizar}>
-                  Actualizar
-                </Button>
-              </div>
-            )}
           </Card.Body>
         </Card>
       </Container>

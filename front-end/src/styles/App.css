@@ -1,51 +1,66 @@
-.navbar-logo {
-  width: 80px;  /* Aumentamos el tamaño del logo */
-  height: auto;
-  margin-right: 20px; /* Más espacio a la derecha del logo */
+:root {
+  --primary-color: #1c7ddd;
+  --secondary-color: #e74c3c;
+  --text-color: #ecf0f1;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+.divider {
+  border-left: 1px solid var(--text-color);
+  margin: 0 20px; /* Ajusta el valor según sea necesario */
+  height: 100%;
 }
 
 .navbar-color {
-  background-color: #1437d3; /* Un fondo más oscuro para un aspecto más elegante */
-  border-bottom: 3px solid #ff9633; /* Una línea naranja en la parte inferior para un toque de color */
+  background-color: var(--primary-color);
 }
 
-/* Efectos de hover para los enlaces del encabezado */
-.navbar-color .navbar-nav .nav-link {
-  color: #fff; /* Color blanco para los enlaces */
-  transition: color 0.3s; /* Transición suave para los efectos de hover */
-}
-
-.navbar-color .navbar-nav .nav-link:hover {
-  color: #ff9633; /* Color naranja al pasar el mouse sobre los enlaces */
-}
-
-/* Ajustes para el botón del menú lateral */
-.navbar-color .btn-outline-light {
-  border-color: #ff9633; /* Borde naranja para el botón */
-  color: #ff9633; /* Texto naranja para el botón */
-}
-
-.navbar-color .btn-outline-light:hover {
-  background-color: #ff9633; /* Fondo naranja al pasar el mouse sobre el botón */
-  color: #333; /* Texto oscuro al pasar el mouse sobre el botón */
-}
-
-
-/* Estilos para el botón "Personal Autorizado" */
-.navbar-color .btn-personal-autorizado {
-  background-color: #ff9633; /* Fondo naranja para el botón */
-  border-color: #ff9633; /* Borde naranja para el botón */
-  color: #fff; /* Texto blanco para el botón */
-}
-
-.navbar-color .btn-personal-autorizado:hover {
-  background-color: #333; /* Fondo oscuro al pasar el mouse sobre el botón */
-  border-color: #333; /* Borde oscuro al pasar el mouse sobre el botón */
-  color: #fff; /* Texto blanco al pasar el mouse sobre el botón */
-}
-
-.navbar-logo-small {
-  width: 50px;
-  height: auto;
+.navbar-logo {
+  height: 50px;
   margin-right: 10px;
+}
+
+.nav-link {
+  color: var(--text-color);
+  transition: color 0.3s ease-in-out;
+  margin: 0 15px; /* Nueva línea: Ajusta el valor según sea necesario */
+}
+
+.nav-link:hover {
+  color: var(--secondary-color);
+}
+
+.btn-personal-autorizado {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  margin-left: 50px; /* Nueva línea: Ajusta el valor según sea necesario */
+}
+
+.btn-personal-autorizado:hover {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+/* Estilos para el menú Offcanvas */
+.offcanvas-header {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.offcanvas-body {
+  background-color: var(--primary-color);
+}
+
+/* Estilo para el botón del menú en pantallas pequeñas */
+.d-md-none {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.d-md-none:hover {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
