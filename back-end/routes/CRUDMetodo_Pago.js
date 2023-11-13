@@ -2,16 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (db) => {
-
   // READ
   router.get('/read', (req, res) => {
-    const sql = 'SELECT * FROM `Metodo de Pago`';
-    db.query(sql, (err, result) => {
+    db.query('CALL VisualizarMetodosPago()', (err, result) => {
       if (err) {
         console.error('Error al leer registros:', err);
         res.status(500).json({ error: 'Error al leer registros' });
       } else {
-        res.status(200).json(result);
+        res.status(200).json(result[0]); // El resultado se devuelve en un array con un elemento por cada conjunto de resultados de la llamada
       }
     });
   });
@@ -19,17 +17,10 @@ module.exports = (db) => {
   // CREATE
   router.post('/create', (req, res) => {
     const { Descripcion } = req.body;
-
     if (!Descripcion) {
       return res.status(400).json({ error: 'El campo Descripcion es obligatorio' });
     }
-
-    const sql = `
-      INSERT INTO \`Metodo de Pago\` (Descripcion)
-      VALUES (?)
-    `;
-
-    db.query(sql, [Descripcion], (err, result) => {
+    db.query('CALL AgregarMetodoPago(?)', [Descripcion], (err, result) => {
       if (err) {
         console.error('Error al insertar registro:', err);
         res.status(500).json({ error: 'Error al insertar registro' });
@@ -43,18 +34,10 @@ module.exports = (db) => {
   router.put('/update/:id', (req, res) => {
     const ID_Metodo_Pago = req.params.id;
     const { Descripcion } = req.body;
-
     if (!Descripcion) {
       return res.status(400).json({ error: 'El campo Descripcion es obligatorio' });
     }
-
-    const sql = `
-      UPDATE \`Metodo de Pago\`
-      SET Descripcion = ?
-      WHERE ID_Metodo_Pago = ?
-    `;
-
-    db.query(sql, [Descripcion, ID_Metodo_Pago], (err, result) => {
+    db.query('CALL ActualizarMetodoPago(?, ?)', [ID_Metodo_Pago, Descripcion], (err, result) => {
       if (err) {
         console.error('Error al actualizar el registro:', err);
         res.status(500).json({ error: 'Error al actualizar el registro' });
@@ -67,8 +50,7 @@ module.exports = (db) => {
   // DELETE
   router.delete('/delete/:id', (req, res) => {
     const ID_Metodo_Pago = req.params.id;
-    const sql = 'DELETE FROM `Metodo de Pago` WHERE ID_Metodo_Pago = ?';
-    db.query(sql, [ID_Metodo_Pago], (err, result) => {
+    db.query('CALL EliminarMetodoPago(?)', [ID_Metodo_Pago], (err, result) => {
       if (err) {
         console.error('Error al eliminar el registro:', err);
         res.status(500).json({ error: 'Error al eliminar el registro' });

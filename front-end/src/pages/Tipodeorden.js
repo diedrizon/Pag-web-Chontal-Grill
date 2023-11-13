@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Container, Card, Form } from "react-bootstrap";
-import MeseroHeader from "../components/MeseroHeader";
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import "../styles/HeaderMesero.css";
+
 
 function VisualizarOrden() {
   const [ordenes, setOrdenes] = useState([]);
@@ -17,6 +18,16 @@ function VisualizarOrden() {
   useEffect(() => {
     obtenerOrdenes();
   }, []);
+
+  const limpiarFormulario = () => {
+    setTipo("");
+    setDescripcion("");
+    setNotaEspecial("");
+    setNumeroMesa("");
+    setDireccion("");
+    setIdSeleccionado(null); // Asegúrate de que el estado de edición también se limpie
+    setIsEditing(false);
+  };
 
   const obtenerOrdenes = async () => {
     try {
@@ -35,7 +46,7 @@ function VisualizarOrden() {
       Descripcion: descripcion,
       Nota_Especial: notaEspecial,
       Numero_Mesa: numeroMesa,
-      Direccion: direccion
+      Direccion: direccion,
     };
     try {
       const response = await fetch(`http://localhost:5000/tipo_orden/create`, {
@@ -62,6 +73,7 @@ function VisualizarOrden() {
       console.error("Error al agregar:", error);
       alert("Error al agregar la orden");
     }
+    limpiarFormulario();
   };
 
   const handleActualizar = async () => {
@@ -70,7 +82,7 @@ function VisualizarOrden() {
       Descripcion: descripcion,
       Nota_Especial: notaEspecial,
       Numero_Mesa: numeroMesa,
-      Direccion: direccion
+      Direccion: direccion,
     };
     try {
       const response = await fetch(
@@ -96,6 +108,7 @@ function VisualizarOrden() {
       console.error("Error al actualizar:", error);
       alert("Error al actualizar la orden");
     }
+    limpiarFormulario();
   };
 
   const handleEliminar = async (id) => {
@@ -119,66 +132,76 @@ function VisualizarOrden() {
     }
   };
   return (
-    <div>
-      <MeseroHeader />
+    <div className="body-content">
+
       <Container>
         <Card className="mt-3">
           <Card.Body>
             <Card.Title>Gestión de Órdenes</Card.Title>
             <Button onClick={() => setMostrarFormulario(!mostrarFormulario)}>
-              {mostrarFormulario ? 'Ocultar' : 'Mostrar'}
+              {mostrarFormulario ? "Ocultar" : "Mostrar"}
             </Button>
-            {
-              mostrarFormulario ? (
-                <Form.Group>
-                  <Form.Label>{isEditing ? 'Editar Orden' : 'Agregar Orden'}</Form.Label>
-                  <Form.Control
-                    value={tipo}
-                    onChange={(e) => setTipo(e.target.value)}
-                    as="select"
-                    custom
-                  >
-                    <option value="" disabled>Selecciona el tipo</option>
-                    <option value="Local">Local</option>
-                    <option value="Domicilio">Domicilio</option>
-                  </Form.Control>
-                  <Form.Control
-                    value={descripcion}
-                    onChange={(e) => setDescripcion(e.target.value)}
-                    placeholder="Descripción"
-                    className="mt-2"
-                  />
-                  <Form.Control
-                    value={notaEspecial}
-                    onChange={(e) => setNotaEspecial(e.target.value)}
-                    placeholder="Nota Especial"
-                    className="mt-2"
-                  />
-                  <Form.Control
-                    type="number"
-                    value={numeroMesa}
-                    onChange={(e) => setNumeroMesa(e.target.value)}
-                    placeholder="Número de Mesa"
-                    className="mt-2"
-                  />
-                  <Form.Control
-                    value={direccion}
-                    onChange={(e) => setDireccion(e.target.value)}
-                    placeholder="Dirección"
-                    className="mt-2"
-                  />
-                  <Button className="mt-2" onClick={isEditing ? handleActualizar : handleAgregar}>
-                    {isEditing ? <FaEdit /> : <FaPlus />} {isEditing ? 'Actualizar' : 'Agregar'}
-                  </Button>
-                </Form.Group>
-              ) : null
-            }
+            {mostrarFormulario ? (
+              <Form.Group>
+                <Form.Label>
+                  {isEditing ? "Editar Orden" : "Agregar Orden"}
+                </Form.Label>
+                <Form.Control
+                  value={tipo}
+                  onChange={(e) => setTipo(e.target.value)}
+                  as="select"
+                  custom
+                >
+                  <option value="" disabled>
+                    Selecciona el tipo
+                  </option>
+                  <option value="Local">Local</option>
+                  <option value="Domicilio">Domicilio</option>
+                </Form.Control>
+                <Form.Control
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  placeholder="Descripción"
+                  className="mt-2"
+                />
+                <Form.Control
+                  value={notaEspecial}
+                  onChange={(e) => setNotaEspecial(e.target.value)}
+                  placeholder="Nota Especial"
+                  className="mt-2"
+                />
+                <Form.Control
+                  type="number"
+                  value={numeroMesa}
+                  onChange={(e) => setNumeroMesa(e.target.value)}
+                  placeholder="Número de Mesa"
+                  className="mt-2"
+                />
+                <Form.Control
+                  value={direccion}
+                  onChange={(e) => setDireccion(e.target.value)}
+                  placeholder="Dirección"
+                  className="mt-2"
+                />
+                <Button
+                  className="mt-2"
+                  onClick={isEditing ? handleActualizar : handleAgregar}
+                >
+                  {isEditing ? <FaEdit /> : <FaPlus />}{" "}
+                  {isEditing ? "Actualizar" : "Agregar"}
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="mt-2"
+                  onClick={limpiarFormulario}
+                >
+                  Limpiar
+                </Button>
+              </Form.Group>
+            ) : null}
             <Form.Group className="mt-3">
               <Form.Label>Buscar Orden</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Buscar por tipo"
-              />
+              <Form.Control type="text" placeholder="Buscar por tipo" />
             </Form.Group>
 
             {/* Tabla para mostrar las órdenes */}

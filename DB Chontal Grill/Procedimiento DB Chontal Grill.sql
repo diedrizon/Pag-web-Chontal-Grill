@@ -633,6 +633,41 @@ END;
 DELIMITER ;
 
 
+/*Procedimiento almacenado de Metodos de pagos */
+
+DELIMITER //
+CREATE PROCEDURE AgregarMetodoPago(IN descripcion VARCHAR(100))
+BEGIN
+  INSERT INTO `Metodo de Pago` (`Descripcion`) VALUES (descripcion);
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE VisualizarMetodosPago()
+BEGIN
+  SELECT * FROM `Metodo de Pago`;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE ActualizarMetodoPago(IN id_metodo_pago INT, IN descripcion VARCHAR(100))
+BEGIN
+  UPDATE `Metodo de Pago` SET `Descripcion` = descripcion WHERE `ID_Metodo_Pago` = id_metodo_pago;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE EliminarMetodoPago(IN id_metodo_pago INT)
+BEGIN
+  DELETE FROM `Metodo de Pago` WHERE `ID_Metodo_Pago` = id_metodo_pago;
+END //
+DELIMITER ;
+
+
+
 
 /*Hasta aqui llegan los de comentarios*/
 

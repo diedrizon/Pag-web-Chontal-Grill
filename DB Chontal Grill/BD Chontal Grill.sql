@@ -18,6 +18,8 @@ CREATE TABLE `Categoria` (
   `Nombre` VARCHAR(50)
 );
 
+
+
 CREATE TABLE `Menu` (
   `ID_Menu` INT AUTO_INCREMENT PRIMARY KEY,
   `ID_Categoria` INT,
@@ -34,6 +36,7 @@ CREATE TABLE `Detalle_Orden` (
   `Cantidad` INT
 );
 
+
 CREATE TABLE `Orden` (
   `ID_Orden` INT AUTO_INCREMENT PRIMARY KEY,
   `ID_Cliente` INT,
@@ -48,6 +51,15 @@ CREATE TABLE `Orden` (
 CREATE TABLE `Metodo de Pago` (
   `ID_Metodo_Pago` INT AUTO_INCREMENT PRIMARY KEY,
   `Descripcion` VARCHAR(100)
+);
+
+CREATE TABLE `Tipo_Orden` (
+  `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
+  `Tipo` ENUM('Local', 'Domicilio'),
+  `Descripcion` VARCHAR(255),
+  `Nota_Especial` VARCHAR(200),
+  `Numero_Mesa` INT DEFAULT NULL,
+  `Direccion` VARCHAR(255) DEFAULT NULL
 );
 
 
@@ -69,6 +81,11 @@ CREATE TABLE `Cliente` (
   `Correo` VARCHAR(50) CHARACTER SET UTF8MB4
 );
 
+
+
+
+
+
 CREATE TABLE `Reservacion` (
   `ID_Reservacion` INT AUTO_INCREMENT PRIMARY KEY,
   `ID_Cliente` INT,
@@ -78,14 +95,8 @@ CREATE TABLE `Reservacion` (
   `Fecha_Fin` TIME
 );
 
-CREATE TABLE `Tipo_Orden` (
-  `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
-  `Tipo` ENUM('Local', 'Domicilio'),
-  `Descripcion` VARCHAR(255),
-  `Nota_Especial` VARCHAR(200),
-  `Numero_Mesa` INT DEFAULT NULL,
-  `Direccion` VARCHAR(255) DEFAULT NULL
-);
+
+
 
 
 

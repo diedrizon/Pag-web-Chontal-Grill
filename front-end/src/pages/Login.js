@@ -1,139 +1,122 @@
 import React, { useState } from 'react';
-import { Button, Container, Form } from "react-bootstrap";
+import { Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
-import { Link, useNavigate } from "react-router-dom";
-
+// Ajustes en los estilos para asegurar que el componente use todo el espacio vertical
 const styles = {
   container: {
-    fontFamily: "'Roboto', sans-serif",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-    background: `url("https://png.pngtree.com/thumb_back/fw800/20170803/pngtree-Food-Menu-Fare-Meal-background-photo-869492.jpg") no-repeat`, 
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    background: 'url("https://png.pngtree.com/thumb_back/fw800/20170803/pngtree-Food-Menu-Fare-Meal-background-photo-869492.jpg")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+    padding: 0,
   },
-  loginContainer: {
-    backgroundColor: "rgba(255, 255, 255, 0.2)", // Fondo transparente
-    padding: "40px",
-    borderRadius: "20px",
-    boxShadow: "0px 10px 25px rgba(0, 0, 0, 0.1)",
-    width: "90%",
-    maxWidth: "400px",
-    position: "relative",
-    zIndex: 1,
+  containerWithBorder: {
+    border: '2px solid #000',
+    borderRadius: '5px',
+    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+    overflow: 'hidden',
+    width: '80%',
+    maxWidth: '350px',
+    minHeight: '250px',
+    margin: 'auto',
+    padding: '1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  formGroup: {
+    marginBottom: '1rem',
   },
   label: {
-    fontWeight: "bold",
-    display: "block",
-    marginBottom: "5px",
+    fontWeight: 'bold',
+    color: '#000',
+    display: 'block',
+    marginBottom: '0.5rem',
   },
   input: {
-    border: "none",
-    borderBottom: "2px solid #fff",
-    borderRadius: "0",
-    outline: "none",
-    boxShadow: "none",
-    marginBottom: "20px",
-    fontSize: "16px",
-    backgroundColor: "transparent", // Fondo transparente
-    color: "#fff",
+    border: '1px solid #ddd',
+    borderRadius: '0',
+    fontSize: '16px',
+    padding: '10px',
+    marginBottom: '20px',
+    boxShadow: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    color: '#000',
   },
   button: {
-    width: "100%",
-    padding: "10px",
-    fontSize: "14px",
-    border: "none",
-    borderRadius: "20px",
-    cursor: "pointer",
-    backgroundColor: "#007BFF",
-    color: "#fff",
-    transition: "background 0.3s",
-  },
-  link: {
-    color: "#ffffff",
-    textDecoration: "none",
-    transition: "color 0.3s",
+    width: '100%',
+    padding: '10px',
+    border: 'none',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    fontSize: '14px',
+    transition: 'background-color 0.3s',
+    marginTop: '20px',
   },
 };
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login = ({ setRol }) => {
   const navigate = useNavigate();
+  const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Manejo de inicio de sesión aquí...
-    const response = await fetch(
-      "http://localhost:5000/autenticacion_empleado/login",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Correo: email, Contraseña: password }),
-      }
-    );
-    const data = await response.json();
-    if (data.success) {
-      switch (data.cargo) {
-        case "Administrador":
-          navigate("/Administrador");
-          break;
-        case "Cajero":
-          navigate("/Cajero");
-          break;
-        case "Mesero":
-          navigate("/Mesero");
-          break;
-        case "Jefe de cocina":
-          navigate("/JefeCocina");
-          break;
-        default:
-          alert("Cargo no reconocido");
-      }
+    const formData = { Correo: correo, Contraseña: contrasena };
+    const response = await fetch('http://localhost:5000/autenticacion_empleado/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    if (response.ok) {
+      const { cargo } = await response.json();
+      setRol(cargo);
+      navigate('/Header');
     } else {
-      alert(data.message);
+      const { message } = await response.json();
+      alert(message || '¡Credenciales incorrectas!');
     }
   };
 
   return (
     <div style={styles.container}>
-      <Container className="text-center mt-5" style={styles.loginContainer}>
+      <div style={styles.containerWithBorder}>
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formEmail">
-            <Form.Label style={styles.label}>Correo</Form.Label>
+          <Form.Group controlId="correo" style={styles.formGroup}>
+            <Form.Label style={styles.label}>Correo Electrónico</Form.Label>
             <Form.Control
-              style={styles.input}
               type="email"
-              placeholder="Ingresar correo"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Correo electrónico"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              style={styles.input}
+              required
             />
           </Form.Group>
-
-          <Form.Group controlId="formPassword">
+          <Form.Group controlId="contrasena" style={styles.formGroup}>
             <Form.Label style={styles.label}>Contraseña</Form.Label>
             <Form.Control
-              style={styles.input}
               type="password"
               placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              style={styles.input}
+              required
             />
           </Form.Group>
-
           <Button variant="primary" type="submit" style={styles.button}>
-            Iniciar sesión
+            Iniciar Sesión
           </Button>
         </Form>
-      </Container>
-      <div className="text-center mt-3">
-        <Link to="/register" style={styles.link}>
-          ¿No tienes una cuenta? Regístrate
-        </Link>
       </div>
     </div>
   );

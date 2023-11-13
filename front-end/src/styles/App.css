@@ -1,66 +1,60 @@
-:root {
-  --primary-color: #1c7ddd;
-  --secondary-color: #e74c3c;
-  --text-color: #ecf0f1;
-}
-
-body {
-  font-family: "Roboto", sans-serif;
-}
-.divider {
-  border-left: 1px solid var(--text-color);
-  margin: 0 20px; /* Ajusta el valor según sea necesario */
-  height: 100%;
-}
-
 .navbar-color {
-  background-color: var(--primary-color);
+  background-color: #361ccc;
 }
 
-.navbar-logo {
-  height: 50px;
-  margin-right: 10px;
+.brand-logo {
+  height: 128px;
+  width: 128px;
+  object-fit: contain;
 }
-
 .nav-link {
-  color: var(--text-color);
-  transition: color 0.3s ease-in-out;
-  margin: 0 15px; /* Nueva línea: Ajusta el valor según sea necesario */
+  margin-right: 15px; 
 }
 
-.nav-link:hover {
-  color: var(--secondary-color);
+.link-unstyled {
+  text-decoration: none;
+  color: inherit;
 }
 
-.btn-personal-autorizado {
-  border-color: var(--secondary-color);
-  color: var(--secondary-color);
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  margin-left: 50px; /* Nueva línea: Ajusta el valor según sea necesario */
+.nav-link .link-unstyled {
+  display: block;
+  padding: .5rem 1rem;
 }
 
-.btn-personal-autorizado:hover {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
+.nav-dropdown {
+  position: relative;
 }
 
-/* Estilos para el menú Offcanvas */
-.offcanvas-header {
-  background-color: var(--primary-color);
-  color: var(--text-color);
+.btn-outline-light {
+  border-color: white;
+  color: white;
 }
 
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
+}
+
+.offcanvas-header,
 .offcanvas-body {
-  background-color: var(--primary-color);
+  padding: 1rem;
 }
 
-/* Estilo para el botón del menú en pantallas pequeñas */
-.d-md-none {
-  border-color: var(--secondary-color);
-  color: var(--secondary-color);
+@media (max-width: 991px) {
+  .navbar-toggle {
+    display: block;
+  }
 }
 
-.d-md-none:hover {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
+.offcanvas .nav-dropdown .nav-dropdown-item {
+  padding: 0.25rem 1rem;
+}
+
+.nav-item-spacing .nav-link {
+  margin-right: 20px; 
+}
+
+@media (max-width: 991px) {
+  .nav-link {
+    margin-right: 5px; 
+  }
 }

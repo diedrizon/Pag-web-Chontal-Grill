@@ -1,0 +1,28 @@
+.body {
+    padding-top: 100px; /* Ajusta este valor al altura de tu encabezado */
+  }
+
+.body-content {
+    padding-top: 50px; /* Ajusta esto a la altura de tu Navbar más el espacio adicional deseado */
+}
+/* Agrega esto a tu archivo CategoriaAdmin.css */
+.mt-custom {
+    margin-top: calc(3rem + 90px); /* Reemplaza 60px con la altura extra del Navbar si es diferente */
+  }
+  
+  
+  /* Asegúrate de que el header tenga un z-index alto para que no se superponga con otros elementos */
+  .navbar-color {
+    z-index: 1030; /* Un valor estándar para los componentes de navegación en Bootstrap */
+  }
+  
+  /* Otras reglas CSS que podrían ser útiles para tu ajuste de layout */
+  .table-responsive {
+    margin-top: 20px; /* Si tienes una tabla que necesita espacio adicional */
+  }
+  
+  .card {
+    margin-top: 20px; /* Para dar espacio adicional arriba de las tarjetas */
+  }
+
+

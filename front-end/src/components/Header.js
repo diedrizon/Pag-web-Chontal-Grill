@@ -1,14 +1,11 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Offcanvas from "react-bootstrap/Offcanvas";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import logo from "../assets/images/LogoPNG.png";
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Navbar, Nav, Offcanvas, Button, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import '../styles/App.css';
+import logo from '../assets/images/LogoPNG.png'; // Asegúrate de tener la ruta correcta a tu imagen
 
-function Header() {
+function Header({ rol }) {
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -17,85 +14,146 @@ function Header() {
 
   return (
     <div>
-      <Navbar className="navbar-color" variant="dark" expand="md">
-        <Container>
-          <Navbar.Brand>
-            <img
-              src={logo}
-              alt="Logo de Chontal Grill"
-              className="navbar-logo"
-            />
-            Chontal Grill
-          </Navbar.Brand>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Link className="nav-link" to="/inicio-cliente">
-                Inicio Cliente
-              </Link>
-              <Link className="nav-link" to="/menu-cliente">
-                Menú Cliente
-              </Link>
-              <Link className="nav-link" to="/reservas-cliente">
-                Reservas Cliente
-              </Link>
-              <Link className="nav-link" to="/orden-cliente">
-                Orden en línea Cliente
-              </Link>
-              <Link className="nav-link" to="/feedback-cliente">
-                Feedback Cliente
-              </Link>
-              <Link className="nav-link" to="/contacto-cliente">
-                Contacto Cliente
-              </Link>
-            </Nav>
-
-            <Link to="/login">
+      {rol === 'Administrador' && (
+        <div>
+          <Navbar className='navbar-color' variant='dark' expand='md' fixed='top'>
+            <Container>
+              <Navbar.Brand href='#home'>
+                <img src={logo} alt='Logo' className='brand-logo' />
+                Administrador
+              </Navbar.Brand>
+              <Navbar.Toggle
+                aria-controls='basic-navbar-nav'
+                style={{ display: 'none' }}
+                className='d-sm-none d-xs-none'
+              />
+              <Navbar.Collapse id='basic-navbar-nav'>
+                <Nav className='ml-auto'>
+                  <Nav.Link as={Link} to='/' className='link-unstyled'>
+                    Inicio
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/menu' className='link-unstyled'>
+                    Menu
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/empleado' className='link-unstyled'>
+                    Empleado
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/categoria' className='link-unstyled'>
+                    Registrar Categoria
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/reservacion' className='link-unstyled'>
+                    Registrar Reservaciones
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/EstadisticasEmpleado' className='link-unstyled'>
+                    Estadísticas
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
               <Button
-                variant="outline-light"
-                className="btn-personal-autorizado ml-2"
+                variant='outline-light'
+                onClick={toggleMenu}
+                className='d-md-none d-block'
+                aria-controls='basic-navbar-nav'
+                aria-expanded={showMenu ? 'true' : 'false'}
               >
-                Personal autorizado
+                Menú
               </Button>
-            </Link>
-          </Navbar.Collapse>
+            </Container>
+          </Navbar>
+          <Offcanvas show={showMenu} onHide={toggleMenu} placement='start'>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Menú</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className='flex-column'>
+              <Nav.Link as={Link} to='/' className='link-unstyled'>
+                    Inicio
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/menu' className='link-unstyled'>
+                    Menu
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/empleado' className='link-unstyled'>
+                    Empleado
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/categoria' className='link-unstyled'>
+                    Registrar Categoria
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/reservacion' className='link-unstyled'>
+                    Registrar Reservaciones
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/EstadisticasEmpleado' className='link-unstyled'>
+                    Estadísticas
+                  </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Offcanvas>
+        </div>
+      )}
 
-          <Button
-            variant="outline-light"
-            onClick={toggleMenu}
-            className="d-md-none"
-          >
-            Menú
-          </Button>
-        </Container>
-      </Navbar>
-
-      <Offcanvas show={showMenu} onHide={toggleMenu} placement="start">
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Menú</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <Nav className="flex-column">
-            <Link className="nav-link" to="/inicio-cliente">
-              Inicio Cliente
-            </Link>
-            <Link className="nav-link" to="/menu-cliente">
-              Menú Cliente
-            </Link>
-            <Link className="nav-link" to="/reservas-cliente">
-              Reservas Cliente
-            </Link>
-            <Link className="nav-link" to="/orden-cliente">
-              Orden en línea Cliente
-            </Link>
-            <Link className="nav-link" to="/feedback-cliente">
-              Feedback Cliente
-            </Link>
-            <Link className="nav-link" to="/contacto-cliente">
-              Contacto Cliente
-            </Link>
-          </Nav>
-        </Offcanvas.Body>
-      </Offcanvas>
+      {rol === 'Mesero' && (
+        <div>
+          <Navbar className='navbar-color' variant='dark' expand='md'>
+            <Container>
+              <Navbar.Brand href='#home'>
+                <img src={logo} alt='Logo' className='brand-logo' />
+                Mesero
+              </Navbar.Brand>
+              <Navbar.Toggle
+                aria-controls='basic-navbar-nav'
+                style={{ display: 'none' }}
+                className='d-sm-none d-xs-none'
+              />
+              <Navbar.Collapse id='basic-navbar-nav'>
+                <Nav className='ml-auto'>
+                  <Nav.Link as={Link} to='/' className='link-unstyled'>
+                    Inicio
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/tipoorden' className='link-unstyled'>
+                    Registrar tipo de orden
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/orden' className='link-unstyled'>
+                    Registrar Orden
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/gestionOrden' className='link-unstyled'>
+                 Gestion Orden
+                </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+              <Button
+                variant='outline-light'
+                onClick={toggleMenu}
+                className='d-md-none d-block'
+                aria-controls='basic-navbar-nav'
+                aria-expanded={showMenu ? 'true' : 'false'}
+              >
+                Menú
+              </Button>
+            </Container>
+          </Navbar>
+          <Offcanvas show={showMenu} onHide={toggleMenu} placement='start'>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Menú</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className='flex-column'>
+                <Nav.Link as={Link} to='/' className='link-unstyled'>
+                  Inicio
+                </Nav.Link>
+               
+                <Nav.Link as={Link} to='/tipoorden' className='link-unstyled'>
+                Tipo de Orden
+                </Nav.Link>
+                <Nav.Link as={Link} to='/orden' className='link-unstyled'>
+                  Registrar Orden
+                </Nav.Link>
+                <Nav.Link as={Link} to='/gestionOrden' className='link-unstyled'>
+                 Gestion Orden
+                </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Offcanvas>
+        </div>
+      )}
     </div>
   );
 }

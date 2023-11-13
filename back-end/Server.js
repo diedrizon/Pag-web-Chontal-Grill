@@ -40,6 +40,8 @@ const CRUDComentarios = require("./routes/CRUDComentarios.js")(db);
 const CRUDOrden = require("./routes/CRUDOrden.js")(db);
 const CRUDDetalle_Orden = require("./routes/CRUDDetalle_Orden.js")(db);
 const AutenticacionEmpleado = require("./routes/CRUDLogin.js")(db);
+const MetodoPago = require("./routes/CRUDMetodo_Pago.js")(db);
+
 
 
 app.use("/categoria", CRUDCategoria);
@@ -52,6 +54,7 @@ app.use("/comentarios", CRUDComentarios);
 app.use("/orden", CRUDOrden);
 app.use("/detalle_orden", CRUDDetalle_Orden);
 app.use("/autenticacion_empleado", AutenticacionEmpleado);
+app.use("/metodopago", MetodoPago);
 
 
 // Iniciar el servidor

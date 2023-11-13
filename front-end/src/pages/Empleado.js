@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Container, Card, Form } from "react-bootstrap";
 import InputMask from "react-input-mask";
-import "../styles/EmpleadoAdmin.css";
-import AdminHeader from "../components/AdminHeader";
-import "../styles/CategoriaAdmin.css";
+import "../styles/HeaderAdministrador.css";
 
 function VisualizarEmpleado() {
   const [empleados, setEmpleados] = useState([]);
@@ -144,9 +142,8 @@ function VisualizarEmpleado() {
   );
 
   return (
-    <div>
-      <AdminHeader />
-      <Container>
+    <div className="body-content">
+    <Container className="mt-custom"> 
         <Card className="mt-3">
           <Card.Body>
             <Card.Title>Gestión de Empleados</Card.Title>

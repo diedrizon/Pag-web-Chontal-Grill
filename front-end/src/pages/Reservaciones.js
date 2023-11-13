@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Container, Card, Form } from "react-bootstrap";
-import AdminHeader from "../components/AdminHeader";
 import { FaPlus, FaEdit, FaTrash, FaEraser } from "react-icons/fa";
-import "../styles/ReservacionesAdmin.css";
+import "../styles/HeaderAdministrador.css";
+
 
 function VisualizarReservacion() {
   const [reservaciones, setReservaciones] = useState([]);
@@ -142,10 +142,9 @@ function VisualizarReservacion() {
   };
 
   return (
-    <div>
-      <AdminHeader />
-      <Container>
-        <Card className="mt-0">
+    <div className="body-content">
+    <Container className="mt-custom"> 
+        <Card className="mt-custom">
           <Card.Body>
             <Card.Title>Gestión de Reservaciones</Card.Title>
 

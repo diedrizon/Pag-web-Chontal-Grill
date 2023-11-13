@@ -87,3 +87,16 @@ module.exports = (db) => {
 
 
 
+
+router.get('/buscarcategoria/:searchText', (req, res) => {
+  const searchText = req.params.searchText;
+  const sql = 'SELECT * FROM Categoria WHERE Nombre LIKE ?';
+  db.query(sql, [`%${searchText}%`], (err, results) => {
+    if (err) {
+      res.status(500).send({ message: 'Error en la consulta de la base de datos', error: err });
+    } else {
+      res.status(200).send(results);
+    }
+  });
+});
+

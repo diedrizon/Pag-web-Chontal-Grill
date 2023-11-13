@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Container, Card, Form } from "react-bootstrap";
-import AdminHeader from "../components/AdminHeader";
-import "../styles/CategoriaAdmin.css";
+import "../styles/HeaderAdministrador.css";
+
 
 
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
@@ -115,10 +115,9 @@ function VisualizarCategoria() {
   
 
   return (
-    <div>
-      <AdminHeader />
-      <Container>
-        <Card className="mt-3">
+    <div className="body-content">
+    <Container className="mt-custom"> 
+        <Card className="mt-5">
           <Card.Body>
             <Card.Title>Gestión de Categorías</Card.Title>
 
