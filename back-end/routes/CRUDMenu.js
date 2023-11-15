@@ -5,16 +5,22 @@ const router = express.Router();
 module.exports = (db) => {
 
   router.get('/read', (req, res) => {
-    const sql = 'SELECT *, TO_BASE64(Imagen) as ImagenBase64 FROM Menu';
-    db.query(sql, (err, result) => {
+    const sql = `
+      SELECT m.*, c.Nombre as NombreCategoria, TO_BASE64(m.Imagen) as ImagenBase64 
+      FROM Menu m 
+      INNER JOIN Categoria c ON m.ID_Categoria = c.ID_Categoria
+    `;
+    db.query(sql, (err, results) => {
       if (err) {
         console.error('Error al leer registros:', err);
         res.status(500).json({ error: 'Error al leer registros' });
       } else {
-        res.status(200).json(result);
+        res.status(200).json(results);
       }
     });
   });
+  
+  
 
   router.post('/create', (req, res) => {
     const { ID_Categoria, Nombre, Descripcion, Precio, Imagen } = req.body;

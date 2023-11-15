@@ -10,11 +10,12 @@ import Menu from './pages/Menu';
 import GestionOrden from './pages/GestionOrden';
 import Orden from './pages/Orden';
 import EstadisticasEmpleado from './pages/EstadisticasEmpleado';
+import MenuCliente from './pages/MenuCliente';
 
 function App() {
-  const [userRol, setUserRol] = useState('');
+  const [userRol, setUserRol] = useState('Cliente');
 
-
+  // Envuelve el componente de la página con el Header
   const withHeader = (PageComponent, props) => (
     <>
       <Header rol={userRol} />
@@ -25,18 +26,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login setRol={setUserRol} />} />
-        <Route path="/Header" element={<Header rol={userRol} />} />
-        <Route path="/categoria" element={withHeader(Categoria, { rol: userRol })} />
-        <Route path="/empleado" element={withHeader(Empleado, { rol: userRol })} />
-        <Route path="/menu" element={withHeader(Menu, { rol: userRol })} />
-        <Route path="/gestionOrden" element={withHeader(GestionOrden, { rol: userRol })} />
+        {/* La ruta raíz ahora muestra MenuCliente con el Header */}
+        <Route path="/" element={withHeader(MenuCliente)} />
+        {/* Ruta para el login. Se maneja el rol después de la autenticación */}
+        <Route path="/login" element={<Login setRol={setUserRol} />} />
+        {/* Resto de las rutas envueltas con el Header */}
+        <Route path="/categoria" element={withHeader(Categoria)} />
+        <Route path="/empleado" element={withHeader(Empleado)} />
+        <Route path="/menu" element={withHeader(Menu)} />
+        <Route path="/gestionOrden" element={withHeader(GestionOrden)} />
         <Route path="/gestionOrden/:id" element={withHeader(GestionOrden)} />
-        <Route path="/reservacion" element={withHeader(Reservacion, { rol: userRol })} />
-        <Route path="/tipoorden" element={withHeader(TipoOrden, { rol: userRol })} />
-        <Route path="/orden" element={withHeader(Orden, { rol: userRol })} />
-        <Route path="/EstadisticasEmpleado" element={withHeader(EstadisticasEmpleado, { rol: userRol })} />
-        
+        <Route path="/reservacion" element={withHeader(Reservacion)} />
+        <Route path="/tipoorden" element={withHeader(TipoOrden)} />
+        <Route path="/orden" element={withHeader(Orden)} />
+        <Route path="/EstadisticasEmpleado" element={withHeader(EstadisticasEmpleado)} />
+        <Route path="/menucliente" element={withHeader(MenuCliente)} />
       </Routes>
     </Router>
   );

@@ -14,6 +14,61 @@ function Header({ rol }) {
 
   return (
     <div>
+
+{rol === 'Cliente' && (
+  <div>
+  <div>
+          <Navbar className='navbar-color' variant='dark' expand='md'>
+            <Container>
+              <Navbar.Brand href='#home'>
+                <img src={logo} alt='Logo' className='brand-logo' />
+                Cliente
+              </Navbar.Brand>
+              <Navbar.Toggle
+                aria-controls='basic-navbar-nav'
+                style={{ display: 'none' }}
+                className='d-sm-none d-xs-none'
+              />
+              <Navbar.Collapse id='basic-navbar-nav'>
+                <Nav className='ml-auto'>
+                  <Nav.Link as={Link} to='/menucliente' className='link-unstyled'>
+                    Menú
+                  </Nav.Link>
+                  <Nav.Link as={Link} to='/reservacion' className='link-unstyled'>
+                    Reservaciones
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+              <Button
+                variant='outline-light'
+                onClick={toggleMenu}
+                className='d-md-none d-block'
+                aria-controls='basic-navbar-nav'
+                aria-expanded={showMenu ? 'true' : 'false'}
+              >
+                Menú
+              </Button>
+            </Container>
+          </Navbar>
+          <Offcanvas show={showMenu} onHide={toggleMenu} placement='start'>
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Menú</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className='flex-column'>
+                <Nav.Link as={Link} to='/menucliente' className='link-unstyled'>
+                  Menú
+                </Nav.Link>
+                <Nav.Link as={Link} to='/reservacion' className='link-unstyled'>
+                  Reservaciones
+                </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Offcanvas>
+        </div>
+      
+  </div>
+)}
       {rol === 'Administrador' && (
         <div>
           <Navbar className='navbar-color' variant='dark' expand='md' fixed='top'>
@@ -90,6 +145,12 @@ function Header({ rol }) {
         </div>
       )}
 
+
+
+
+
+      
+
       {rol === 'Mesero' && (
         <div>
           <Navbar className='navbar-color' variant='dark' expand='md'>
@@ -154,6 +215,7 @@ function Header({ rol }) {
           </Offcanvas>
         </div>
       )}
+      
     </div>
   );
 }

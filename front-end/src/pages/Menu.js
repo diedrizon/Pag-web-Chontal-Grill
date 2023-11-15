@@ -1,11 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Form, Button, Table, Image, Container, Row, Card, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Table,
+  Image,
+  Container,
+  Row,
+  Card,
+  Col,
+} from "react-bootstrap";
 import axios from "axios";
 import "../styles/HeaderAdministrador.css";
 
 function App() {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); // Nuevo estado para los datos filtrados
+  const [filteredData, setFilteredData] = useState([]);
   const [formData, setFormData] = useState({
     ID_Categoria: "",
     Nombre: "",
@@ -19,6 +28,22 @@ function App() {
   const [currentItem, setCurrentItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const fileInputRef = useRef();
+
+  const [categorias, setCategorias] = useState([]);
+  const [searchCategoryTerm, setSearchCategoryTerm] = useState("");
+
+  const handleCategorySearchChange = (e) => {
+    setSearchCategoryTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/categoria/read")
+      .then((response) => {
+        setCategorias(response.data);
+      })
+      .catch((error) => console.error("Error al cargar categorías", error));
+  }, []);
 
   useEffect(() => {
     reloadMenuData();
@@ -42,10 +67,12 @@ function App() {
 
   const reloadMenuData = () => {
     axios.get("http://localhost:5000/menu/read").then((response) => {
+      console.log(response.data); // Agregar esta línea para depuración
       setData(response.data);
-      setFilteredData(response.data); // Establece los datos filtrados aquí también
+      setFilteredData(response.data);
     });
   };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,41 +105,54 @@ function App() {
     if (!formData.Nombre) {
       formIsValid = false;
       tempErrors["Nombre"] = "El nombre es requerido";
+    } else if (formData.Nombre.length > 100) {
+      formIsValid = false;
+      tempErrors["Nombre"] = "El nombre no puede superar los 100 caracteres";
     }
 
     if (!formData.Descripcion) {
       formIsValid = false;
       tempErrors["Descripcion"] = "La descripción es requerida";
+    } else if (formData.Descripcion.length > 200) {
+      formIsValid = false;
+      tempErrors["Descripcion"] =
+        "La descripción no puede superar los 200 caracteres";
     }
 
     if (!formData.Precio) {
       formIsValid = false;
       tempErrors["Precio"] = "El precio es requerido";
+    } else if (isNaN(parseFloat(formData.Precio))) {
+      formIsValid = false;
+      tempErrors["Precio"] = "El precio debe ser numérico";
     }
 
     setErrors(tempErrors);
     return formIsValid;
   };
 
-  const renderValidationError = (field) => {
-    if (errors[field]) {
-      return <div style={{ color: "red" }}>{errors[field]}</div>;
-    }
-    return null;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Intentando enviar formulario", formData);
+
     if (validateForm()) {
+      console.log("Formulario validado correctamente");
       if (window.confirm("¿Está seguro que desea guardar este menú?")) {
         axios
           .post("http://localhost:5000/menu/create", formData)
           .then((response) => {
+            console.log("Respuesta del servidor", response);
             alert("Menú guardado con éxito!");
             reloadMenuData();
             resetForm();
+          })
+          .catch((error) => {
+            console.error("Error al guardar el menú", error);
+            alert("Ocurrió un error al guardar el menú.");
           });
       }
+    } else {
+      console.log("Errores en el formulario", errors);
     }
   };
 
@@ -121,7 +161,10 @@ function App() {
     if (validateForm()) {
       if (window.confirm("¿Está seguro que desea actualizar este menú?")) {
         axios
-          .put(`http://localhost:5000/menu/update/${currentItem.ID_Menu}`, formData)
+          .put(
+            `http://localhost:5000/menu/update/${currentItem.ID_Menu}`,
+            formData
+          )
           .then((response) => {
             alert("Menú actualizado con éxito!");
             reloadMenuData();
@@ -134,10 +177,12 @@ function App() {
 
   const handleDelete = (id) => {
     if (window.confirm("¿Está seguro que desea eliminar este menú?")) {
-      axios.delete(`http://localhost:5000/menu/delete/${id}`).then((response) => {
-        alert("Menú eliminado con éxito!");
-        reloadMenuData();
-      });
+      axios
+        .delete(`http://localhost:5000/menu/delete/${id}`)
+        .then((response) => {
+          alert("Menú eliminado con éxito!");
+          reloadMenuData();
+        });
     }
   };
 
@@ -157,6 +202,10 @@ function App() {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    setErrors({});
+    setIsEditing(false);
+    setCurrentItem(null);
+    setSearchCategoryTerm(""); // Agrega esta línea
   };
 
   const handleEdit = (item) => {
@@ -170,27 +219,77 @@ function App() {
     setCurrentItem(item);
   };
 
+  const filteredCategorias = searchCategoryTerm
+    ? categorias.filter((categoria) =>
+        categoria.Nombre.toLowerCase().includes(
+          searchCategoryTerm.toLowerCase()
+        )
+      )
+    : categorias;
+
+  useEffect(() => {
+    if (searchCategoryTerm) {
+      const matchedCategory = categorias.find((categoria) =>
+        categoria.Nombre.toLowerCase().includes(
+          searchCategoryTerm.toLowerCase()
+        )
+      );
+
+      if (matchedCategory) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          ID_Categoria: matchedCategory.ID_Categoria,
+        }));
+      }
+    } else {
+      setFormData((prevFormData) => ({ ...prevFormData, ID_Categoria: "" }));
+    }
+  }, [searchCategoryTerm, categorias]);
+
   return (
     <div className="body-content">
       <Container className="mt-custom">
         <Card className="mt-3">
           <Card.Body>
-            <Card.Title>Gestión de Menu</Card.Title>
+            <Card.Title>Gestión de Menú</Card.Title>
             <Form onSubmit={isEditing ? handleUpdate : handleSubmit}>
               <Row>
-                <Col md={6}>
-                  <Form.Group controlId="formCategoryID">
-                    <Form.Label>ID Categoría</Form.Label>
+                <Col sm={12} md={4}>
+                  <Form.Group controlId="formCategorySearch">
+                    <Form.Label>Buscar Categoría</Form.Label>
                     <Form.Control
-                      type="number"
-                      name="ID_Categoria"
-                      value={formData.ID_Categoria}
-                      onChange={handleChange}
-                      min={1}
+                      type="text"
+                      placeholder="Buscar Categoría"
+                      onChange={handleCategorySearchChange}
+                      value={searchCategoryTerm}
                     />
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+                <Col sm={12} md={4}>
+                  <Form.Group controlId="formCategoryID">
+                    <Form.Label>Categoria</Form.Label>
+                    <Form.Select
+                      name="ID_Categoria"
+                      value={formData.ID_Categoria}
+                      onChange={handleChange}
+                      isInvalid={!!errors.ID_Categoria}
+                    >
+                      <option value="">Seleccione una categoría</option>
+                      {filteredCategorias.map((categoria) => (
+                        <option
+                          key={categoria.ID_Categoria}
+                          value={categoria.ID_Categoria}
+                        >
+                          {categoria.Nombre}
+                        </option>
+                      ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {errors.ID_Categoria}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+                <Col sm={12} md={4}>
                   <Form.Group controlId="formName">
                     <Form.Label>Nombre</Form.Label>
                     <Form.Control
@@ -199,24 +298,36 @@ function App() {
                       value={formData.Nombre}
                       onChange={handleChange}
                       maxLength={100}
+                      isInvalid={!!errors.Nombre}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.Nombre}
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
               </Row>
+
               <Row>
-                <Col md={6}>
+                <Col sm={12}>
                   <Form.Group controlId="formDescription">
                     <Form.Label>Descripción</Form.Label>
                     <Form.Control
-                      type="text"
+                      as="textarea"
+                      rows={3}
                       name="Descripcion"
                       value={formData.Descripcion}
                       onChange={handleChange}
-                      maxLength={200}
+                      isInvalid={!!errors.Descripcion}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.Descripcion}
+                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
-                <Col md={6}>
+              </Row>
+
+              <Row>
+                <Col sm={12} md={4}>
                   <Form.Group controlId="formPrice">
                     <Form.Label>Precio</Form.Label>
                     <Form.Control
@@ -225,20 +336,24 @@ function App() {
                       name="Precio"
                       value={formData.Precio}
                       onChange={handleChange}
-                      min={0}
+                      isInvalid={!!errors.Precio}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.Precio}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+                <Col sm={12} md={4}>
+                  <Form.Group controlId="formImage">
+                    <Form.Label>Imagen</Form.Label>
+                    <Form.Control
+                      type="file"
+                      onChange={handleFileChange}
+                      ref={fileInputRef}
                     />
                   </Form.Group>
                 </Col>
-              </Row>
-              <Row>
-              <Col md={6}>
-        <Form.Group controlId="formImage">
-          <Form.Label>Imagen</Form.Label>
-          {/* Agregamos la ref al input de archivo */}
-          <Form.Control type="file" onChange={handleFileChange} ref={fileInputRef} />
-        </Form.Group>
-      </Col>
-                <Col md={6}>
+                <Col sm={12} md={4}>
                   <Form.Group
                     controlId="formImagePreview"
                     className="mt-3 mb-3"
@@ -262,19 +377,28 @@ function App() {
                   </Form.Group>
                 </Col>
               </Row>
-              <Button variant="primary" type="submit" className="me-2 mb-2">
-                {isEditing ? "Actualizar" : "Guardar"}
-              </Button>
-              <Button variant="secondary" onClick={resetForm} className="mb-2">
-                Limpiar
-              </Button>
+
+              <Row>
+                <Col
+                  sm={12}
+                  className="text-center"
+                  style={{ marginTop: "-4rem", marginBottom: "1rem" }}
+                >
+                  <Button variant="primary" type="submit" className="me-2">
+                    {isEditing ? "Actualizar" : "Guardar"}
+                  </Button>
+                  <Button variant="secondary" onClick={resetForm}>
+                    Limpiar
+                  </Button>
+                </Col>
+              </Row>
             </Form>
 
-            <Row style={{ marginTop: "10px" }}>
-              <Col>
+            <Row>
+              <Col sm={12}>
                 <Form.Group
                   controlId="formSearch"
-                  style={{ marginBottom: "10px" }}
+                  style={{ marginBottom: "20px" }}
                 >
                   <Form.Label>Buscar</Form.Label>
                   <Form.Control
@@ -286,8 +410,9 @@ function App() {
                 </Form.Group>
               </Col>
             </Row>
+
             <Row>
-              <Col>
+              <Col sm={12}>
                 <Table striped bordered hover responsive>
                   <thead>
                     <tr>
@@ -300,12 +425,12 @@ function App() {
                       <th>Acciones</th>
                     </tr>
                   </thead>
-
                   <tbody>
-                    {data.map((item) => (
+                    {filteredData.map((item) => (
                       <tr key={item.ID_Menu}>
                         <td>{item.ID_Menu}</td>
-                        <td>{item.ID_Categoria}</td>
+                        <td>{item.NombreCategoria}</td>{" "}
+                        {/* Cambiado de ID_Categoria a NombreCategoria */}
                         <td>{item.Nombre}</td>
                         <td>{item.Descripcion}</td>
                         <td>{item.Precio}</td>
