@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Container, Card, Badge, Form, FloatingLabel, Button } from 'react-bootstrap';
 import Header from '../components/Header';
-import '../styles/App.css';
+import "../styles/MenuCliente.css";
 
 function Galeria({ rol }) {
   const [menus, setMenus] = useState([]);
@@ -48,7 +48,7 @@ function Galeria({ rol }) {
   return (
     <div>
       <Header rol={rol} />
-      <Container className="margen-contenedor">
+      <Container className="mt-4">
         <Row className="mb-3">
           <Col>
             <FloatingLabel controlId="search" label="Buscar">
@@ -64,25 +64,27 @@ function Galeria({ rol }) {
 
         {Object.keys(categorizeMenus).map((categoria, index) => (
           <div key={index}>
-            <h3>{categoria}</h3>
+            <h3 className="mt-3">{categoria}</h3>
             <Row className="g-3">
               {categorizeMenus[categoria].map((menu, idx) => (
-                <Col key={idx} sm="12" md="4" lg="3">
-                  <Card className="h-100">
-                    <Card.Img className="image-card" variant="top" src={`data:image/jpeg;base64,${menu.ImagenBase64}`} alt={menu.Nombre} />
+                <Col key={idx} sm="12" md="6" lg="4" xl="3">
+                  <Card className="h-100 card-container">
+                    <div className="image-container">
+                      <Card.Img className="image-card" variant="top" src={`data:image/jpeg;base64,${menu.ImagenBase64}`} alt={menu.Nombre} />
+                    </div>
                     <Card.Body>
-                      <Card.Title>{menu.Nombre}</Card.Title>
-                      <Card.Text>{menu.Descripcion}</Card.Text>
-                      <div><Badge bg="success">Precio: {menu.Precio}</Badge></div>
+                      <Card.Title className="card-title">{menu.Nombre}</Card.Title>
+                      <Card.Text className="card-text">{menu.Descripcion}</Card.Text>
+                      <div className="card-badge"><Badge bg="success">Precio: {menu.Precio}</Badge></div>
                     </Card.Body>
-                    <Card.Body>
+                    <Card.Footer>
                       <div className="d-flex justify-content-between align-items-center">
                         <Button variant="outline-secondary" onClick={() => adjustItemQuantity(menu.ID_Menu, -1)}>-</Button>
                         <span>{cart[menu.ID_Menu] || 0}</span>
                         <Button variant="outline-primary" onClick={() => adjustItemQuantity(menu.ID_Menu, 1)}>+</Button>
                       </div>
-                      <Button className="mt-2" variant="outline-success" onClick={() => addToCart(menu.ID_Menu, cart[menu.ID_Menu] || 0)}>Agregar</Button>
-                    </Card.Body>
+                      <Button className="mt-2 w-100" variant="outline-success" onClick={() => addToCart(menu.ID_Menu, cart[menu.ID_Menu] || 0)}>Agregar</Button>
+                    </Card.Footer>
                   </Card>
                 </Col>
               ))}

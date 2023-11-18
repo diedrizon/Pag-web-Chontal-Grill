@@ -1,8 +1,8 @@
+// Login.js
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-// Ajustes en los estilos para asegurar que el componente use todo el espacio vertical
 const styles = {
   container: {
     background: 'url("https://png.pngtree.com/thumb_back/fw800/20170803/pngtree-Food-Menu-Fare-Meal-background-photo-869492.jpg")',
@@ -80,7 +80,7 @@ const Login = ({ setRol }) => {
     if (response.ok) {
       const { cargo } = await response.json();
       setRol(cargo);
-      navigate('/Header');
+      navigate('/'); // Se cambió a la ruta principal
     } else {
       const { message } = await response.json();
       alert(message || '¡Credenciales incorrectas!');

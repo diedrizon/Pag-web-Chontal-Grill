@@ -1,0 +1,36 @@
+/* MenuCliente.css */
+.image-container {
+    width: 100%; /* Ancho al 100% del contenedor de la tarjeta */
+    height: auto; /* Altura automática para mantener la proporción de la imagen */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que exceda las dimensiones del contenedor */
+  }
+  
+  .image-card {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: auto; /* Altura automática para mantener la proporción de la imagen */
+    object-fit: cover; /* Asegura que la imagen se ajuste al contenedor sin distorsionarla */
+  }
+  
+  .card-container {
+    margin-bottom: 1rem; /* Añadir un margen en la parte inferior de cada tarjeta */
+  }
+  
+  .card-title {
+    min-height: 50px; /* Un mínimo de altura para el título, ajustar según sea necesario */
+  }
+  
+  .card-text {
+    min-height: 70px; /* Un mínimo de altura para el texto, ajustar según sea necesario */
+  }
+  
+  .card-badge {
+    margin-bottom: 1rem; /* Espacio entre el precio y los botones */
+  }
+  
+  /* Asegura que todas las tarjetas tengan la misma altura */
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  

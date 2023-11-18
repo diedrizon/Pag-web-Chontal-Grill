@@ -1,3 +1,4 @@
+// App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -15,32 +16,33 @@ import MenuCliente from './pages/MenuCliente';
 function App() {
   const [userRol, setUserRol] = useState('Cliente');
 
-  // Envuelve el componente de la página con el Header
-  const withHeader = (PageComponent, props) => (
-    <>
-      <Header rol={userRol} />
-      <PageComponent {...props} />
-    </>
-  );
+  const renderHomePage = () => {
+    switch (userRol) {
+      case 'Administrador':
+        return <Categoria />;
+      case 'Mesero':
+        return <TipoOrden />;
+      case 'Cliente':
+      default:
+        return <MenuCliente />;
+    }
+  };
 
   return (
     <Router>
       <Routes>
-        {/* La ruta raíz ahora muestra MenuCliente con el Header */}
-        <Route path="/" element={withHeader(MenuCliente)} />
-        {/* Ruta para el login. Se maneja el rol después de la autenticación */}
+        <Route path="/" element={<><Header rol={userRol} />{renderHomePage()}</>} />
         <Route path="/login" element={<Login setRol={setUserRol} />} />
-        {/* Resto de las rutas envueltas con el Header */}
-        <Route path="/categoria" element={withHeader(Categoria)} />
-        <Route path="/empleado" element={withHeader(Empleado)} />
-        <Route path="/menu" element={withHeader(Menu)} />
-        <Route path="/gestionOrden" element={withHeader(GestionOrden)} />
-        <Route path="/gestionOrden/:id" element={withHeader(GestionOrden)} />
-        <Route path="/reservacion" element={withHeader(Reservacion)} />
-        <Route path="/tipoorden" element={withHeader(TipoOrden)} />
-        <Route path="/orden" element={withHeader(Orden)} />
-        <Route path="/EstadisticasEmpleado" element={withHeader(EstadisticasEmpleado)} />
-        <Route path="/menucliente" element={withHeader(MenuCliente)} />
+        <Route path="/categoria" element={<><Header rol={userRol} /><Categoria /></>} />
+        <Route path="/empleado" element={<><Header rol={userRol} /><Empleado /></>} />
+        <Route path="/menu" element={<><Header rol={userRol} /><Menu /></>} />
+        <Route path="/gestionOrden" element={<><Header rol={userRol} /><GestionOrden /></>} />
+        <Route path="/gestionOrden/:id" element={<><Header rol={userRol} /><GestionOrden /></>} />
+        <Route path="/reservacion" element={<><Header rol={userRol} /><Reservacion /></>} />
+        <Route path="/tipoorden" element={<><Header rol={userRol} /><TipoOrden /></>} />
+        <Route path="/orden" element={<><Header rol={userRol} /><Orden /></>} />
+        <Route path="/EstadisticasEmpleado" element={<><Header rol={userRol} /><EstadisticasEmpleado /></>} />
+        <Route path="/menucliente" element={<><Header rol={userRol} /><MenuCliente /></>} />
       </Routes>
     </Router>
   );
