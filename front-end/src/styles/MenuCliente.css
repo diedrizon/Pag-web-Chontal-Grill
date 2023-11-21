@@ -1,36 +1,89 @@
-/* MenuCliente.css */
-.image-container {
-    width: 100%; /* Ancho al 100% del contenedor de la tarjeta */
-    height: auto; /* Altura automática para mantener la proporción de la imagen */
-    overflow: hidden; /* Oculta cualquier parte de la imagen que exceda las dimensiones del contenedor */
+.card-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-container .card-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: fill;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title, .card-text {
+  margin-bottom: auto;
+}
+
+.card-badge {
+  align-self: center;
+  margin-top: auto;
+}
+
+.card-footer {
+  padding: 1em;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.cart-container {
+  position: sticky;
+  top: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-group-item .btn {
+  margin: 0 5px;
+}
+
+.cart-item-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .cart-container {
+    position: static;
+    max-height: none;
   }
-  
-  .image-card {
-    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
-    height: auto; /* Altura automática para mantener la proporción de la imagen */
-    object-fit: cover; /* Asegura que la imagen se ajuste al contenedor sin distorsionarla */
-  }
-  
-  .card-container {
-    margin-bottom: 1rem; /* Añadir un margen en la parte inferior de cada tarjeta */
-  }
-  
-  .card-title {
-    min-height: 50px; /* Un mínimo de altura para el título, ajustar según sea necesario */
-  }
-  
-  .card-text {
-    min-height: 70px; /* Un mínimo de altura para el texto, ajustar según sea necesario */
-  }
-  
-  .card-badge {
-    margin-bottom: 1rem; /* Espacio entre el precio y los botones */
-  }
-  
-  /* Asegura que todas las tarjetas tengan la misma altura */
-  .card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
+}
+
+.cart-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

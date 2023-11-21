@@ -145,9 +145,9 @@ function VisualizarCategoria() {
             <Table striped bordered hover className="mt-3">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Acciones</th>
+                <th style={{ textAlign: "center" }} >ID</th>
+                <th style={{ textAlign: "center" }}>Nombre</th>
+                <th style={{ textAlign: "center" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -156,23 +156,26 @@ function VisualizarCategoria() {
                     <td>{categoria.ID_Categoria}</td>
                     <td>{categoria.Nombre}</td>
                     <td>
+                    <td style={{ display: 'flex', justifyContent: 'center' }}>
                       <Button
-                        className="button-margin"
+                        variant="outline-primary"
+                        style={{ margin: "5px", padding: "4px 8px" }}
                         onClick={() => {
                           setIdSeleccionado(categoria.ID_Categoria);
                           setNombreSeleccionado(categoria.Nombre);
                           setIsEditing(true);
                         }}
                       >
-                        <FaEdit /> Editar
+                        <FaEdit size={32} />
                       </Button>
                       <Button
-                        variant="danger"
-                        className="button-margin"
+                        variant="outline-danger"
+                        style={{ margin: "5px", padding: "4px 8px" }}
                         onClick={() => handleEliminar(categoria.ID_Categoria)}
                       >
-                        <FaTrash /> Eliminar
+                        <FaTrash size={32} />
                       </Button>
+                    </td>
                     </td>
                   </tr>
                 ))}

@@ -1,6 +1,8 @@
 USE chontal_grill;
 
 
+select * FROM `tipo_orden`;
+
 
 -- Luego, crear la tabla Autenticacion_Empleado
 CREATE TABLE `Autenticacion_Empleado` (
@@ -18,8 +20,6 @@ CREATE TABLE `Categoria` (
   `Nombre` VARCHAR(50)
 );
 
-
-
 CREATE TABLE `Menu` (
   `ID_Menu` INT AUTO_INCREMENT PRIMARY KEY,
   `ID_Categoria` INT,
@@ -36,7 +36,6 @@ CREATE TABLE `Detalle_Orden` (
   `Cantidad` INT
 );
 
-
 CREATE TABLE `Orden` (
   `ID_Orden` INT AUTO_INCREMENT PRIMARY KEY,
   `ID_Cliente` INT,
@@ -45,13 +44,30 @@ CREATE TABLE `Orden` (
   `Monto` DECIMAL(6, 2),
   `Estado` VARCHAR(50),
   `Fecha_Hora` DATETIME,
-   `ID_Metodo_Pago` INT
+  `ID_Metodo_Pago` INT
 );
+
+
 
 CREATE TABLE `Metodo de Pago` (
   `ID_Metodo_Pago` INT AUTO_INCREMENT PRIMARY KEY,
   `Descripcion` VARCHAR(100)
 );
+
+CREATE TABLE `Cliente` (
+  `ID_Cliente` INT AUTO_INCREMENT PRIMARY KEY,
+  `Cedula` VARCHAR(16),
+  `Nombres` VARCHAR(50),
+  `Apellidos` VARCHAR(50),
+  `Telefono` VARCHAR(9),
+  `Correo` VARCHAR(50) CHARACTER SET UTF8MB4,
+  `Contraseña` VARCHAR(50)
+);
+
+
+
+
+
 
 CREATE TABLE `Tipo_Orden` (
   `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,19 +87,6 @@ CREATE TABLE `Empleado` (
   `Correo` VARCHAR(50) CHARACTER SET UTF8MB4,
   `Cargo` VARCHAR(32)
 );
-
-CREATE TABLE `Cliente` (
-  `ID_Cliente` INT AUTO_INCREMENT PRIMARY KEY,
-  `Cedula` VARCHAR(16),
-  `Nombres` VARCHAR(50),
-  `Apellidos` VARCHAR(50),
-  `Telefono` VARCHAR(9),
-  `Correo` VARCHAR(50) CHARACTER SET UTF8MB4
-);
-
-
-
-
 
 
 CREATE TABLE `Reservacion` (
@@ -107,6 +110,8 @@ CREATE TABLE `Comentarios` (
   `Calificacion` INT,
   `Fecha` DATETIME
 );
+
+
 
 
 

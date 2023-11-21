@@ -10,7 +10,8 @@ import {
   Col,
 } from "react-bootstrap";
 import axios from "axios";
-import "../styles/HeaderAdministrador.css";
+
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 function App() {
   const [data, setData] = useState([]);
@@ -413,62 +414,56 @@ function App() {
 
             <Row>
               <Col sm={12}>
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>ID Menú</th>
-                      <th>ID Categoría</th>
-                      <th>Nombre</th>
-                      <th>Descripción</th>
-                      <th>Precio</th>
-                      <th>Imagen</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredData.map((item) => (
-                      <tr key={item.ID_Menu}>
-                        <td>{item.ID_Menu}</td>
-                        <td>{item.NombreCategoria}</td>{" "}
-                        {/* Cambiado de ID_Categoria a NombreCategoria */}
-                        <td>{item.Nombre}</td>
-                        <td>{item.Descripcion}</td>
-                        <td>{item.Precio}</td>
-                        <td>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          >
-                            <Image
-                              src={`data:${item.MimeType};base64,${item.ImagenBase64}`}
-                              style={{ width: "50px", height: "50px" }}
-                            />
-                          </div>
-                        </td>
-                        <td>
-                          <Button
-                            style={{ marginRight: "10px" }}
-                            variant="warning"
-                            onClick={() => handleEdit(item)}
-                          >
-                            Editar
-                          </Button>
-                          <Button
-                            variant="danger"
-                            onClick={() => handleDelete(item.ID_Menu)}
-                          >
-                            Eliminar
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+              <Table striped bordered hover responsive>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: "center" }}>ID Menú</th>
+                  <th style={{ textAlign: "center" }}>Categoría</th>
+                  <th style={{ textAlign: "center" }}>Nombre</th>
+                  <th style={{ textAlign: "center" }}>Descripción</th>
+                  <th style={{ textAlign: "center" }}>Precio</th>
+                  <th style={{ textAlign: "center" }}>Imagen</th>
+                  <th style={{ textAlign: "center" }}>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((item) => (
+                  <tr key={item.ID_Menu}>
+                    <td>{item.ID_Menu}</td>
+                    <td>{item.NombreCategoria}</td> {/* Asumiendo que tienes una columna NombreCategoria */}
+                    <td>{item.Nombre}</td>
+                    <td>{item.Descripcion}</td>
+                    <td>{item.Precio}</td>
+                    <td>
+                      <div style={{ display: "flex", justifyContent: "center" }}>
+                        <Image
+                          src={`data:image/png;base64,${item.ImagenBase64}`}
+                          style={{ width: "64px", height: "64px" }}
+                        />
+                      </div>
+                    </td>
+                    <td>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <Button
+                          style={{ margin: "5px", padding: "4px 8px" }}
+                          variant="warning"
+                          onClick={() => handleEdit(item)}
+                        >
+                          <FaEdit size={32} />
+                        </Button>
+                        <Button
+                          style={{ margin: "5px", padding: "4px 8px" }}
+                          variant="danger"
+                          onClick={() => handleDelete(item.ID_Menu)}
+                        >
+                          <FaTrash size={32} />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
               </Col>
             </Row>
           </Card.Body>

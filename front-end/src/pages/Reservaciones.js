@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Container, Card, Form } from "react-bootstrap";
-import { FaPlus, FaEdit, FaTrash, FaEraser } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash, FaEraser, } from "react-icons/fa";
 import "../styles/HeaderAdministrador.css";
 
 
@@ -218,13 +218,13 @@ function VisualizarReservacion() {
             <Table striped bordered hover className="mt-3">
               <thead>
                 <tr>
-                  <th>ID Reservación</th>
-                  <th>ID Cliente</th>
-                  <th>Descripción</th>
-                  <th>Fecha Reservación</th>
-                  <th>Hora Inicio</th>
-                  <th>Hora Fin</th>
-                  <th>Acciones</th>
+                  <th style={{ textAlign: "center" }}>ID Reservación</th>
+                  <th style={{ textAlign: "center" }}>ID Cliente</th>
+                  <th style={{ textAlign: "center" }}>Descripción</th>
+                  <th style={{ textAlign: "center" }}>Fecha Reservación</th>
+                  <th style={{ textAlign: "center" }}>Hora Inicio</th>
+                  <th style={{ textAlign: "center" }}>Hora Fin</th>
+                  <th style={{ textAlign: "center" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -246,8 +246,10 @@ function VisualizarReservacion() {
                       <td>{reservacion.Fecha_Inicio}</td>
                       <td>{reservacion.Fecha_Fin}</td>
                       <td>
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <Button
-                          className="mt-2 mb-2"
+                          variant="outline-primary"
+                          style={{ margin: "5px", padding: "4px 8px" }}
                           onClick={() => {
                             setIdSeleccionado(reservacion.ID_Reservacion);
                             setFormFields({
@@ -259,18 +261,17 @@ function VisualizarReservacion() {
                             });
                             setIsEditing(true);
                           }}
-                        >
-                          <FaEdit /> Editar
-                        </Button>
-                        <Button
-                          variant="danger"
-                          className="button-margin"
-                          onClick={() =>
-                            handleEliminar(reservacion.ID_Reservacion)
-                          }
-                        >
-                          <FaTrash /> Eliminar
-                        </Button>
+                          >
+                            <FaEdit size={32} />
+                          </Button>
+                          <Button
+                            variant="outline-danger"
+                            style={{ margin: "5px", padding: "4px 8px" }}
+                            onClick={() => handleEliminar(reservacion.ID_Reservacion)}
+                          >
+                            <FaTrash size={32} />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}

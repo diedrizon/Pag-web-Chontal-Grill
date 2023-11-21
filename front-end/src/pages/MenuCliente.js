@@ -1,36 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Container, Card, Badge, Form, FloatingLabel, Button } from 'react-bootstrap';
-import Header from '../components/Header';
+import React, { useState, useEffect } from "react";
+import {
+  Row,
+  Col,
+  Container,
+  Card,
+  Badge,
+  Button,
+  ListGroup,
+  Modal,
+  Form,
+  FloatingLabel,
+} from "react-bootstrap";
+import Header from "../components/Header";
 import "../styles/MenuCliente.css";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 function Galeria({ rol }) {
   const [menus, setMenus] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState({});
+  const [comentarios, setComentarios] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/menu/read')
-      .then(response => response.json())
-      .then(data => setMenus(data))
-      .catch(error => console.error('Error:', error));
+    fetch("http://localhost:5000/menu/read")
+      .then((response) => response.json())
+      .then((data) => setMenus(data))
+      .catch((error) => console.error("Error:", error));
+
+    fetch("http://localhost:5000/comentarios/read")
+      .then((response) => response.json())
+      .then((data) => setComentarios(data))
+      .catch((error) =>
+        console.error("Error al obtener los comentarios:", error)
+      );
   }, []);
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
+
+  const addToCart = (menu, amount) => {
+    const newAmount = cart[menu.ID_Menu]
+      ? cart[menu.ID_Menu].cantidad + amount
+      : amount;
+    setCart({
+      ...cart,
+      [menu.ID_Menu]: { ...menu, cantidad: Math.max(newAmount, 0) },
+    });
   };
 
-  const addToCart = (id, amount) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [id]: (prevCart[id] || 0) + amount
-    }));
-  };
-
-  const adjustItemQuantity = (id, adjustment) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [id]: Math.max((prevCart[id] || 0) + adjustment, 0)
-    }));
+  const removeFromCart = (id) => {
+    const newCart = { ...cart };
+    delete newCart[id];
+    setCart(newCart);
   };
 
   const searchFilteredMenus = menus.filter((menu) => {
@@ -41,15 +62,37 @@ function Galeria({ rol }) {
   });
 
   const categorizeMenus = searchFilteredMenus.reduce((acc, menu) => {
-    acc[menu.NombreCategoria] = [...(acc[menu.NombreCategoria] || []), menu];
+    const category = menu.NombreCategoria || "Otros";
+    acc[category] = [...(acc[category] || []), menu];
     return acc;
   }, {});
+
+  const renderStars = (calificacion, totalEstrellas = 5) => {
+    let stars = [];
+    // Añadir estrellas llenas
+    for (let i = 0; i < totalEstrellas; i++) {
+      stars.push(
+        i < calificacion ? (
+          <FaStar key={i} color="#ffc107" />
+        ) : (
+          <FaRegStar key={i} color="#e4e5e9" />
+        )
+      );
+    }
+    return <div className="star-rating">{stars}</div>;
+  };
+
+  // Calcular la calificación promedio y el número total de opiniones
+  const calificacionPromedio =
+    comentarios.reduce((acc, comentario) => acc + comentario.Calificacion, 0) /
+    comentarios.length;
+  const totalOpiniones = comentarios.length;
 
   return (
     <div>
       <Header rol={rol} />
       <Container className="mt-4">
-        <Row className="mb-3">
+        <Row className="mb-3 align-items-center">
           <Col>
             <FloatingLabel controlId="search" label="Buscar">
               <Form.Control
@@ -61,36 +104,145 @@ function Galeria({ rol }) {
             </FloatingLabel>
           </Col>
         </Row>
-
-        {Object.keys(categorizeMenus).map((categoria, index) => (
-          <div key={index}>
-            <h3 className="mt-3">{categoria}</h3>
-            <Row className="g-3">
-              {categorizeMenus[categoria].map((menu, idx) => (
-                <Col key={idx} sm="12" md="6" lg="4" xl="3">
-                  <Card className="h-100 card-container">
-                    <div className="image-container">
-                      <Card.Img className="image-card" variant="top" src={`data:image/jpeg;base64,${menu.ImagenBase64}`} alt={menu.Nombre} />
+        <Button variant="secondary" onClick={() => setShowModal(true)}>
+          {isNaN(calificacionPromedio) ? (
+            "No hay opiniones"
+          ) : (
+            <>
+              {renderStars(Math.round(calificacionPromedio))}
+              <span>{totalOpiniones} opiniones</span>
+            </>
+          )}
+        </Button>
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Opiniones</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <ListGroup>
+              {comentarios.map((comentario, index) => (
+                <ListGroup.Item key={index} className="comentario-list-item">
+                  <div className="comentario-content">
+                    <div className="comentario-nombre">
+                      <strong>
+                        {comentario.Nombres} {comentario.Apellidos}
+                      </strong>
                     </div>
-                    <Card.Body>
-                      <Card.Title className="card-title">{menu.Nombre}</Card.Title>
-                      <Card.Text className="card-text">{menu.Descripcion}</Card.Text>
-                      <div className="card-badge"><Badge bg="success">Precio: {menu.Precio}</Badge></div>
-                    </Card.Body>
-                    <Card.Footer>
-                      <div className="d-flex justify-content-between align-items-center">
-                        <Button variant="outline-secondary" onClick={() => adjustItemQuantity(menu.ID_Menu, -1)}>-</Button>
-                        <span>{cart[menu.ID_Menu] || 0}</span>
-                        <Button variant="outline-primary" onClick={() => adjustItemQuantity(menu.ID_Menu, 1)}>+</Button>
-                      </div>
-                      <Button className="mt-2 w-100" variant="outline-success" onClick={() => addToCart(menu.ID_Menu, cart[menu.ID_Menu] || 0)}>Agregar</Button>
-                    </Card.Footer>
-                  </Card>
-                </Col>
+                    <div className="comentario-rating">
+                      {renderStars(comentario.Calificacion)}
+                    </div>
+                    <div className="comentario-texto">
+                      {comentario.Comentario}
+                    </div>
+                    <div className="comentario-fecha">
+                      {new Date(comentario.Fecha).toLocaleDateString()}
+                    </div>
+                  </div>
+                </ListGroup.Item>
               ))}
-            </Row>
-          </div>
-        ))}
+            </ListGroup>
+          </Modal.Body>
+        </Modal>
+        <Row>
+          <Col md={8}>
+            {Object.keys(categorizeMenus).map((categoria, index) => (
+              <div key={index}>
+                <h3 className="mt-3">{categoria}</h3>
+                <Row className="g-3">
+                  {categorizeMenus[categoria].map((menu, idx) => (
+                    <Col key={idx} sm="12" md="6" lg="4" xl="3">
+                      <Card className="h-100 card-container">
+                        <Card.Img
+                          variant="top"
+                          src={`data:image/jpeg;base64,${menu.ImagenBase64}`}
+                          alt={menu.Nombre}
+                        />
+                        <Card.Body>
+                          <Card.Title>{menu.Nombre}</Card.Title>
+                          <Card.Text>{menu.Descripcion}</Card.Text>
+                          <Badge bg="success">Precio: {menu.Precio}</Badge>
+                        </Card.Body>
+                        <Card.Footer>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <Button
+                              variant="outline-secondary"
+                              onClick={() => addToCart(menu, -1)}
+                            >
+                              -
+                            </Button>
+                            <span>{cart[menu.ID_Menu]?.cantidad || 0}</span>
+                            <Button
+                              variant="outline-primary"
+                              onClick={() => addToCart(menu, 1)}
+                            >
+                              +
+                            </Button>
+                          </div>
+                          <Button
+                            className="mt-2 w-100"
+                            variant="outline-success"
+                            onClick={() => addToCart(menu, 1)}
+                          >
+                            Agregar
+                          </Button>
+                        </Card.Footer>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            ))}
+          </Col>
+          <Col md={4}>
+            <div className="cart-container">
+              <h4>Mi pedido</h4>
+              <ListGroup>
+                {Object.keys(cart).map((key) => (
+                  <ListGroup.Item
+                    key={key}
+                    className="d-flex justify-content-between align-items-stretch cart-list-item"
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={`data:image/jpeg;base64,${cart[key].ImagenBase64}`}
+                        alt={cart[key].Nombre}
+                        className="cart-item-image"
+                      />
+                      <div>
+                        <div>{cart[key].Nombre}</div>
+                        <Badge bg="success">Precio: {cart[key].Precio}</Badge>
+                      </div>
+                    </div>
+                    <div className="button-group">
+                      <Button
+                        variant="outline-secondary"
+                        onClick={() => addToCart(cart[key], -1)}
+                      >
+                        -
+                      </Button>
+                      <span className="px-3">{cart[key].cantidad}</span>
+                      <Button
+                        variant="outline-primary"
+                        onClick={() => addToCart(cart[key], 1)}
+                      >
+                        +
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => removeFromCart(key)}
+                      >
+                        Quitar
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+              <Button className="w-100 mt-3" variant="primary">
+                Continuar
+              </Button>
+            </div>
+          </Col>
+        </Row>
       </Container>
     </div>
   );
