@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Container, Card, Form } from "react-bootstrap";
+import { Modal, Table, Button, Container, Card, Form, Row, Col } from "react-bootstrap";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import "../styles/HeaderMesero.css";
-
 
 function VisualizarOrden() {
   const [ordenes, setOrdenes] = useState([]);
@@ -14,20 +13,13 @@ function VisualizarOrden() {
   const [idSeleccionado, setIdSeleccionado] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [mostrarFormulario, setMostrarFormulario] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState('');
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     obtenerOrdenes();
   }, []);
-
-  const limpiarFormulario = () => {
-    setTipo("");
-    setDescripcion("");
-    setNotaEspecial("");
-    setNumeroMesa("");
-    setDireccion("");
-    setIdSeleccionado(null); // Asegúrate de que el estado de edición también se limpie
-    setIsEditing(false);
-  };
 
   const obtenerOrdenes = async () => {
     try {
@@ -40,7 +32,49 @@ function VisualizarOrden() {
     }
   };
 
+  const limpiarFormulario = () => {
+    setTipo("");
+    setDescripcion("");
+    setNotaEspecial("");
+    setNumeroMesa("");
+    setDireccion("");
+    setIdSeleccionado(null);
+    setIsEditing(false);
+  };
+
+  const validarFormulario = () => {
+    if (tipo === "" || descripcion === "" || (tipo === "Local" && numeroMesa === "") || (tipo === "Domicilio" && direccion === "")) {
+      handleShowModal("Todos los campos son obligatorios");
+      return false;
+    }
+    return true;
+  };
+
+  const handleShowModal = (content) => {
+    setModalContent(content);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => setShowModal(false);
+
+  const handleTipoChange = (e) => {
+    const selectedTipo = e.target.value;
+    setTipo(selectedTipo);
+    if (selectedTipo === "Local") {
+      setDireccion("");
+    } else if (selectedTipo === "Domicilio") {
+      setNumeroMesa("");
+    }
+  };
+
+  const handleNumeroMesaChange = (e) => {
+    const numero = e.target.value;
+    setNumeroMesa(numero >= 1 ? numero : "");
+  };
+
   const handleAgregar = async () => {
+    if (!validarFormulario()) return;
+
     const nuevaOrden = {
       Tipo: tipo,
       Descripcion: descripcion,
@@ -48,6 +82,7 @@ function VisualizarOrden() {
       Numero_Mesa: numeroMesa,
       Direccion: direccion,
     };
+
     try {
       const response = await fetch(`http://localhost:5000/tipo_orden/create`, {
         method: "POST",
@@ -58,25 +93,21 @@ function VisualizarOrden() {
       });
 
       if (response.ok) {
-        alert("Orden creada con éxito");
-        setTipo("");
-        setDescripcion("");
-        setNotaEspecial("");
-        setNumeroMesa("");
-        setDireccion("");
+        handleShowModal("Orden creada con éxito");
         obtenerOrdenes();
-        setIsEditing(false);
       } else {
-        alert("Error al agregar la orden");
+        handleShowModal("Error al agregar la orden");
       }
     } catch (error) {
       console.error("Error al agregar:", error);
-      alert("Error al agregar la orden");
+      handleShowModal("Error al agregar la orden");
     }
     limpiarFormulario();
   };
 
   const handleActualizar = async () => {
+    if (!validarFormulario() || idSeleccionado === null) return;
+
     const ordenToUpdate = {
       Tipo: tipo,
       Descripcion: descripcion,
@@ -84,6 +115,7 @@ function VisualizarOrden() {
       Numero_Mesa: numeroMesa,
       Direccion: direccion,
     };
+
     try {
       const response = await fetch(
         `http://localhost:5000/tipo_orden/update/${idSeleccionado}`,
@@ -97,19 +129,19 @@ function VisualizarOrden() {
       );
 
       if (response.ok) {
-        alert("Orden actualizada con éxito");
+        handleShowModal("Orden actualizada con éxito");
         obtenerOrdenes();
-        setIdSeleccionado(null);
-        setIsEditing(false);
       } else {
-        alert("Error al actualizar la orden");
+        handleShowModal("Error al actualizar la orden");
       }
     } catch (error) {
       console.error("Error al actualizar:", error);
-      alert("Error al actualizar la orden");
+      handleShowModal("Error al actualizar la orden");
     }
     limpiarFormulario();
   };
+
+
 
   const handleEliminar = async (id) => {
     try {
@@ -121,90 +153,104 @@ function VisualizarOrden() {
       );
 
       if (response.ok) {
-        alert("Orden eliminada con éxito");
+        handleShowModal("Orden eliminada con éxito");
         obtenerOrdenes();
       } else {
-        alert("Error al eliminar la orden");
+        handleShowModal("Error al eliminar la orden");
       }
     } catch (error) {
       console.error("Error al eliminar:", error);
-      alert("Error al eliminar la orden");
+      handleShowModal("Error al eliminar la orden");
     }
+
   };
+
+  const handleBuscar = (e) => {
+    const textoBusqueda = e.target.value.toLowerCase();
+    setBusqueda(textoBusqueda);
+  };
+
+  const ordenesFiltradas = ordenes.filter(orden => {
+    const tipo = orden.Tipo ? orden.Tipo.toLowerCase() : "";
+    const descripcion = orden.Descripcion ? orden.Descripcion.toLowerCase() : "";
+    const notaEspecial = orden.Nota_Especial ? orden.Nota_Especial.toLowerCase() : "";
+    const direccion = orden.Direccion ? orden.Direccion.toLowerCase() : "";
+  
+    return tipo.includes(busqueda) ||
+      descripcion.includes(busqueda) ||
+      notaEspecial.includes(busqueda) ||
+      direccion.includes(busqueda);
+  });
+  
+
   return (
     <div className="body-content">
-
-      <Container>
-        <Card className="mt-3">
+       <Container >
+        <Card className="mt-1">
           <Card.Body>
             <Card.Title>Gestión de Órdenes</Card.Title>
             <Button onClick={() => setMostrarFormulario(!mostrarFormulario)}>
-              {mostrarFormulario ? "Ocultar" : "Mostrar"}
+              {mostrarFormulario ? "Ocultar Formulario" : "Mostrar Formulario"}
             </Button>
-            {mostrarFormulario ? (
-              <Form.Group>
-                <Form.Label>
-                  {isEditing ? "Editar Orden" : "Agregar Orden"}
-                </Form.Label>
-                <Form.Control
-                  value={tipo}
-                  onChange={(e) => setTipo(e.target.value)}
-                  as="select"
-                  custom
-                >
-                  <option value="" disabled>
-                    Selecciona el tipo
-                  </option>
-                  <option value="Local">Local</option>
-                  <option value="Domicilio">Domicilio</option>
-                </Form.Control>
-                <Form.Control
-                  value={descripcion}
-                  onChange={(e) => setDescripcion(e.target.value)}
-                  placeholder="Descripción"
-                  className="mt-2"
-                />
-                <Form.Control
-                  value={notaEspecial}
-                  onChange={(e) => setNotaEspecial(e.target.value)}
-                  placeholder="Nota Especial"
-                  className="mt-2"
-                />
-                <Form.Control
-                  type="number"
-                  value={numeroMesa}
-                  onChange={(e) => setNumeroMesa(e.target.value)}
-                  placeholder="Número de Mesa"
-                  className="mt-2"
-                />
-                <Form.Control
-                  value={direccion}
-                  onChange={(e) => setDireccion(e.target.value)}
-                  placeholder="Dirección"
-                  className="mt-2"
-                />
-                <Button
-                  className="mt-2"
-                  onClick={isEditing ? handleActualizar : handleAgregar}
-                >
-                  {isEditing ? <FaEdit /> : <FaPlus />}{" "}
-                  {isEditing ? "Actualizar" : "Agregar"}
+            {mostrarFormulario && (
+              <Form>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group controlId="formTipo">
+                      <Form.Label>Tipo</Form.Label>
+                      <Form.Control as="select" value={tipo} onChange={handleTipoChange}>
+                        <option value="">Selecciona el tipo</option>
+                        <option value="Local">Local</option>
+                        <option value="Domicilio">Domicilio</option>
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group controlId="formDescripcion">
+                      <Form.Label>Descripción</Form.Label>
+                      <Form.Control type="text" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} placeholder="Descripción de la orden" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group controlId="formNotaEspecial">
+                      <Form.Label>Nota Especial</Form.Label>
+                      <Form.Control type="text" value={notaEspecial} onChange={(e) => setNotaEspecial(e.target.value)} placeholder="Nota especial si es necesaria" />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    {tipo === "Local" && (
+                      <Form.Group controlId="formNumeroMesa">
+                        <Form.Label>Número de Mesa</Form.Label>
+                        <Form.Control type="number" value={numeroMesa} onChange={handleNumeroMesaChange} placeholder="Número de mesa" min="1" />
+                      </Form.Group>
+                    )}
+                    {tipo === "Domicilio" && (
+                      <Form.Group controlId="formDireccion">
+                        <Form.Label>Dirección</Form.Label>
+                        <Form.Control type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} placeholder="Dirección de entrega" disabled={tipo === "Local"} />
+                      </Form.Group>
+                    )}
+                  </Col>
+                </Row>
+                <Button variant="primary" onClick={isEditing ? handleActualizar : handleAgregar}>
+                  {isEditing ? <FaEdit /> : <FaPlus />} {isEditing ? "Actualizar Orden" : "Agregar Orden"}
                 </Button>
-                <Button
-                  variant="secondary"
-                  className="mt-2"
-                  onClick={limpiarFormulario}
-                >
+                <Button variant="secondary" onClick={limpiarFormulario} className="ms-2">
                   Limpiar
                 </Button>
-              </Form.Group>
-            ) : null}
-            <Form.Group className="mt-3">
-              <Form.Label>Buscar Orden</Form.Label>
-              <Form.Control type="text" placeholder="Buscar por tipo" />
-            </Form.Group>
-
-            {/* Tabla para mostrar las órdenes */}
+                <Form.Group className="mt-3">
+          <Form.Label>Buscar Orden</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Buscar por tipo, descripción, nota especial o dirección"
+            value={busqueda}
+            onChange={handleBuscar}
+          />
+        </Form.Group>
+              </Form>
+            )}
             <Table striped bordered hover className="mt-3">
               <thead>
                 <tr>
@@ -218,7 +264,7 @@ function VisualizarOrden() {
                 </tr>
               </thead>
               <tbody>
-                {ordenes.map((orden) => (
+              {ordenesFiltradas.map((orden) => (
                   <tr key={orden.Id_Tipo_Orden}>
                     <td>{orden.Id_Tipo_Orden}</td>
                     <td>{orden.Tipo}</td>
@@ -228,7 +274,7 @@ function VisualizarOrden() {
                     <td>{orden.Direccion}</td>
                     <td>
                       <Button
-                        className="button-margin"
+                        variant="warning"
                         onClick={() => {
                           setIdSeleccionado(orden.Id_Tipo_Orden);
                           setTipo(orden.Tipo);
@@ -243,8 +289,8 @@ function VisualizarOrden() {
                       </Button>
                       <Button
                         variant="danger"
-                        className="button-margin"
                         onClick={() => handleEliminar(orden.Id_Tipo_Orden)}
+                        className="ms-2"
                       >
                         <FaTrash /> Eliminar
                       </Button>
@@ -255,6 +301,17 @@ function VisualizarOrden() {
             </Table>
           </Card.Body>
         </Card>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Mensaje</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{modalContent}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </div>
   );

@@ -115,9 +115,9 @@ function VisualizarCategoria() {
   
 
   return (
-    <div className="body-content">
-    <Container className="mt-custom"> 
-        <Card className="mt-5">
+    <div className=".body-content">
+      <Container className=".mt-custom">
+        <Card>
           <Card.Body>
             <Card.Title>Gestión de Categorías</Card.Title>
 

@@ -1,0 +1,158 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("../assets/images/login2.png");
+    background-size: 100% 100%; /* Ajusta la imagen para que cubra completamente el contenedor */
+    background-repeat: no-repeat;
+    background-position: center; /* Centra la imagen de fondo */
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        background-size: cover; /* Asegura que la imagen cubra toda el área sin perder sus proporciones */
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        background-size: contain; /* Ajusta la imagen para que se ajuste completamente dentro del contenedor sin recortar */
+    }
+}
+
+  
+  .login-container .containerWithBorder {
+    padding: 2rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    height: auto;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .login-container .containerWithBorder:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-container .login-title {
+    text-align: center;
+    color: #d35400;
+    margin-bottom: 2rem;
+  }
+  
+  .login-container .formGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .login-container .label {
+    display: block;
+    color: #444;
+    margin-bottom: 0.5rem;
+  }
+  
+  .login-container .input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease;
+  }
+  
+  .login-container .input:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 0 2px rgba(211, 84, 0, 0.2);
+  }
+  
+  .login-container .button {
+    width: 100%;
+    padding: 0.79rem;
+    border-radius: 10px;
+    background-color: #d35400;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-container .button:hover {
+    background-color: #f49a21;
+  }
+  
+  .login-container .registerLink {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #d35400;
+  }
+  
+  .login-container .registerLink:hover {
+    text-decoration: underline;
+  }
+  
+  .modal-header {
+    background-color: #f49a21;
+    border-bottom: 1px solid #ddd;
+    padding: 1.25rem;
+  }
+  
+  .modal-footer {
+    border-bottom: 1px solid #ddd;
+    padding: 1.25rem;
+  }
+  .modal-title {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  .modal-body {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+  }
+  
+  .modal-body .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .modal-body .form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .modal-body .form-control:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 0 2px rgba(211, 84, 0, 0.2);
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #ddd;
+    padding: 1.25rem;
+  }
+  
+  .modal-register-button {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 12px;
+    background-color: #d35400;
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .modal-register-button:hover {
+    background-color: #f49a21;
+  }
+  
+  .modal-body .form-control {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  

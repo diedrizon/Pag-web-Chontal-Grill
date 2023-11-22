@@ -14,6 +14,7 @@ import {
 import Header from "../components/Header";
 import "../styles/MenuCliente.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 function Galeria({ rol }) {
   const [menus, setMenus] = useState([]);
@@ -21,6 +22,11 @@ function Galeria({ rol }) {
   const [cart, setCart] = useState({});
   const [comentarios, setComentarios] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showOpiniones, setShowOpiniones] = useState(false);
+
+  //Cerrar y abrir modal
+  const handleShow = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
 
   useEffect(() => {
     fetch("http://localhost:5000/menu/read")
@@ -35,6 +41,18 @@ function Galeria({ rol }) {
         console.error("Error al obtener los comentarios:", error)
       );
   }, []);
+
+  //Total de Items
+  const totalItems = Object.values(cart).reduce(
+    (total, item) => total + item.cantidad,
+    0
+  );
+
+  // Total de Compra
+  const totalCompra = Object.values(cart).reduce(
+    (total, item) => total + item.Precio * item.cantidad,
+    0
+  );
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
@@ -104,7 +122,7 @@ function Galeria({ rol }) {
             </FloatingLabel>
           </Col>
         </Row>
-        <Button variant="secondary" onClick={() => setShowModal(true)}>
+        <Button variant="secondary" onClick={() => setShowOpiniones(true)}>
           {isNaN(calificacionPromedio) ? (
             "No hay opiniones"
           ) : (
@@ -114,7 +132,7 @@ function Galeria({ rol }) {
             </>
           )}
         </Button>
-        <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal show={showOpiniones} onHide={() => setShowOpiniones(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Opiniones</Modal.Title>
           </Modal.Header>
@@ -144,7 +162,7 @@ function Galeria({ rol }) {
           </Modal.Body>
         </Modal>
         <Row>
-          <Col md={8}>
+          <Col md={11}>
             {Object.keys(categorizeMenus).map((categoria, index) => (
               <div key={index}>
                 <h3 className="mt-3">{categoria}</h3>
@@ -157,11 +175,11 @@ function Galeria({ rol }) {
                           src={`data:image/jpeg;base64,${menu.ImagenBase64}`}
                           alt={menu.Nombre}
                         />
-                        <Card.Body>
+                        <div className="product-info">
                           <Card.Title>{menu.Nombre}</Card.Title>
                           <Card.Text>{menu.Descripcion}</Card.Text>
                           <Badge bg="success">Precio: {menu.Precio}</Badge>
-                        </Card.Body>
+                        </div>
                         <Card.Footer>
                           <div className="d-flex justify-content-between align-items-center">
                             <Button
@@ -193,57 +211,72 @@ function Galeria({ rol }) {
               </div>
             ))}
           </Col>
-          <Col md={4}>
-            <div className="cart-container">
-              <h4>Mi pedido</h4>
-              <ListGroup>
-                {Object.keys(cart).map((key) => (
-                  <ListGroup.Item
-                    key={key}
-                    className="d-flex justify-content-between align-items-stretch cart-list-item"
-                  >
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={`data:image/jpeg;base64,${cart[key].ImagenBase64}`}
-                        alt={cart[key].Nombre}
-                        className="cart-item-image"
-                      />
-                      <div>
-                        <div>{cart[key].Nombre}</div>
-                        <Badge bg="success">Precio: {cart[key].Precio}</Badge>
-                      </div>
-                    </div>
-                    <div className="button-group">
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => addToCart(cart[key], -1)}
-                      >
-                        -
-                      </Button>
-                      <span className="px-3">{cart[key].cantidad}</span>
-                      <Button
-                        variant="outline-primary"
-                        onClick={() => addToCart(cart[key], 1)}
-                      >
-                        +
-                      </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => removeFromCart(key)}
-                      >
-                        Quitar
-                      </Button>
-                    </div>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-              <Button className="w-100 mt-3" variant="primary">
-                Continuar
-              </Button>
-            </div>
+          <Col md={1}>
+            <Button
+              variant="primary"
+              className="cart-button"
+              onClick={handleShow}
+            >
+              <FaShoppingCart />
+              <span className="cart-counter">{totalItems}</span>
+            </Button>
           </Col>
         </Row>
       </Container>
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Mi pedido</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ListGroup>
+            {Object.keys(cart).map((key) => (
+              <ListGroup.Item
+                key={key}
+                className="d-flex justify-content-between align-items-stretch cart-list-item"
+              >
+                <div className="d-flex align-items-center">
+                  <img
+                    src={`data:image/jpeg;base64,${cart[key].ImagenBase64}`}
+                    alt={cart[key].Nombre}
+                    className="cart-item-image"
+                  />
+                  <div>
+                    <div>{cart[key].Nombre}</div>
+                    <Badge bg="success">Precio: {cart[key].Precio}</Badge>
+                  </div>
+                </div>
+                <div className="button-group">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => addToCart(cart[key], -1)}
+                  >
+                    -
+                  </Button>
+                  <span className="px-3">{cart[key].cantidad}</span>
+                  <Button
+                    variant="outline-primary"
+                    onClick={() => addToCart(cart[key], 1)}
+                  >
+                    +
+                  </Button>
+                  <Button variant="danger" onClick={() => removeFromCart(key)}>
+                    Quitar
+                  </Button>
+                </div>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Modal.Body>
+        <Modal.Footer>
+          <h1 className="total">Total = C${totalCompra}</h1>
+          <Button variant="secondary" onClick={handleClose}>
+            Cerrar
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Continuar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

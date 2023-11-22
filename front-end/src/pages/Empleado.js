@@ -142,9 +142,9 @@ function VisualizarEmpleado() {
   );
 
   return (
-    <div className="body-content">
-    <Container className="mt-custom"> 
-        <Card className="mt-3">
+    <div className=".body-content">
+      <Container className=".mt-custom">
+        <Card>
           <Card.Body>
             <Card.Title>Gestión de Empleados</Card.Title>
 

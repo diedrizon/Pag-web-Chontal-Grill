@@ -114,8 +114,9 @@ function EstadisticasEmpleado({ rol }) {
   };
 
   return (
-    <div className="body-content">
-      <Container className="mt-custom">
+    <div className=".body-content">
+      <Container className=".mt-custom">
+       
         <Row>
           <Col>
             <Card>

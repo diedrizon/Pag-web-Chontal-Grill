@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 function App() {
   const [data, setData] = useState([]);
@@ -68,12 +68,10 @@ function App() {
 
   const reloadMenuData = () => {
     axios.get("http://localhost:5000/menu/read").then((response) => {
-      console.log(response.data); // Agregar esta línea para depuración
       setData(response.data);
       setFilteredData(response.data);
     });
   };
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -248,9 +246,9 @@ function App() {
   }, [searchCategoryTerm, categorias]);
 
   return (
-    <div className="body-content">
-      <Container className="mt-custom">
-        <Card className="mt-3">
+    <div className=".body-content">
+      <Container className=".mt-custom">
+        <Card>
           <Card.Body>
             <Card.Title>Gestión de Menú</Card.Title>
             <Form onSubmit={isEditing ? handleUpdate : handleSubmit}>
@@ -414,56 +412,67 @@ function App() {
 
             <Row>
               <Col sm={12}>
-              <Table striped bordered hover responsive>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: "center" }}>ID Menú</th>
-                  <th style={{ textAlign: "center" }}>Categoría</th>
-                  <th style={{ textAlign: "center" }}>Nombre</th>
-                  <th style={{ textAlign: "center" }}>Descripción</th>
-                  <th style={{ textAlign: "center" }}>Precio</th>
-                  <th style={{ textAlign: "center" }}>Imagen</th>
-                  <th style={{ textAlign: "center" }}>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((item) => (
-                  <tr key={item.ID_Menu}>
-                    <td>{item.ID_Menu}</td>
-                    <td>{item.NombreCategoria}</td> {/* Asumiendo que tienes una columna NombreCategoria */}
-                    <td>{item.Nombre}</td>
-                    <td>{item.Descripcion}</td>
-                    <td>{item.Precio}</td>
-                    <td>
-                      <div style={{ display: "flex", justifyContent: "center" }}>
-                        <Image
-                          src={`data:image/png;base64,${item.ImagenBase64}`}
-                          style={{ width: "64px", height: "64px" }}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <Button
-                          style={{ margin: "5px", padding: "4px 8px" }}
-                          variant="warning"
-                          onClick={() => handleEdit(item)}
-                        >
-                          <FaEdit size={32} />
-                        </Button>
-                        <Button
-                          style={{ margin: "5px", padding: "4px 8px" }}
-                          variant="danger"
-                          onClick={() => handleDelete(item.ID_Menu)}
-                        >
-                          <FaTrash size={32} />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: "center" }}>ID Menú</th>
+                      <th style={{ textAlign: "center" }}>Categoría</th>
+                      <th style={{ textAlign: "center" }}>Nombre</th>
+                      <th style={{ textAlign: "center" }}>Descripción</th>
+                      <th style={{ textAlign: "center" }}>Precio</th>
+                      <th style={{ textAlign: "center" }}>Imagen</th>
+                      <th style={{ textAlign: "center" }}>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredData.map((item) => (
+                      <tr key={item.ID_Menu}>
+                        <td>{item.ID_Menu}</td>
+                        <td>{item.NombreCategoria}</td>{" "}
+                        {/* Asumiendo que tienes una columna NombreCategoria */}
+                        <td>{item.Nombre}</td>
+                        <td>{item.Descripcion}</td>
+                        <td>{item.Precio}</td>
+                        <td>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Image
+                              src={`data:image/png;base64,${item.ImagenBase64}`}
+                              style={{ width: "64px", height: "64px" }}
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <Button
+                              style={{ margin: "5px", padding: "4px 8px" }}
+                              variant="warning"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <FaEdit size={32} />
+                            </Button>
+                            <Button
+                              style={{ margin: "5px", padding: "4px 8px" }}
+                              variant="danger"
+                              onClick={() => handleDelete(item.ID_Menu)}
+                            >
+                              <FaTrash size={32} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </Col>
             </Row>
           </Card.Body>

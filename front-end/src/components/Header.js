@@ -1,69 +1,27 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Navbar, Nav, Offcanvas, Button, Container } from "react-bootstrap";
+import { Navbar, Nav, Offcanvas, Button, Container,NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FaSignOutAlt } from "react-icons/fa"; // Importación del ícono de salida
 import "../styles/App.css";
-import logo from "../assets/images/LogoPNG.png"; // Asegúrate de tener la ruta correcta a tu imagen
+import logo from "../assets/images/LogoOficial.png";
 
-function Header({ rol }) {
+function Header({ rol, setRol }) {
   const [showMenu, setShowMenu] = useState(false);
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
+  const toggleMenu = () => setShowMenu(!showMenu);
+
+  const handleLogout = () => {
+    setRol("Cliente");
+    localStorage.setItem("userRol", "Cliente");
   };
 
   return (
     <div>
       {rol === "Cliente" && (
         <div>
-          <Navbar className="navbar-color" variant="dark" expand="md">
-            <Container>
-              <Navbar.Brand href="#home">
-                <img src={logo} alt="Logo" className="brand-logo" />
-                Cliente
-              </Navbar.Brand>
-              <Navbar.Toggle
-                aria-controls="basic-navbar-nav"
-                style={{ display: "none" }}
-                className="d-sm-none d-xs-none"
-              />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
-                  <Nav.Link as={Link} to="/menucliente" className="link-unstyled">
-                    Menú
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/reservacion" className="link-unstyled">
-                    Reservaciones
-                  </Nav.Link>
-                  {/* Sign In button */}
-                  <Nav.Link as={Link} to="/login" className="btn btn-outline-light ms-2">
-                    Iniciar sesión
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-              <Offcanvas show={showMenu} onHide={toggleMenu} placement="start">
-                <Offcanvas.Header closeButton>
-                  <Offcanvas.Title>Menú</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                  <Nav className="flex-column">
-                    <Nav.Link as={Link} to="/menucliente" className="link-unstyled">
-                      Menú
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/reservacion" className="link-unstyled">
-                      Reservaciones
-                    </Nav.Link>
-                  </Nav>
-                </Offcanvas.Body>
-              </Offcanvas>
-            </Container>
-          </Navbar>
-        </div>
-      )}
-      {rol === "Administrador" && (
-        <div>
           <Navbar
-            className="navbar-color"
+            className={`navbar-color-${rol.toLowerCase()}`}
             variant="dark"
             expand="md"
             fixed="top"
@@ -71,40 +29,34 @@ function Header({ rol }) {
             <Container>
               <Navbar.Brand href="#home">
                 <img src={logo} alt="Logo" className="brand-logo" />
-                Administrador
               </Navbar.Brand>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
-                style={{ display: "none" }}
-                className="d-sm-none d-xs-none"
+                onClick={toggleMenu}
+                className="d-md-none d-block"
               />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                  <Nav.Link as={Link} to="/" className="link-unstyled">
-                    Inicio
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/menu" className="link-unstyled">
-                    Menu
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/empleado" className="link-unstyled">
-                    Empleado
-                  </Nav.Link>
-                  <Nav.Link as={Link} to="/categoria" className="link-unstyled">
-                    Registrar Categoria
+                  <Nav.Link
+                    as={Link}
+                    to="/menucliente"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Menú
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
                     to="/reservacion"
-                    className="link-unstyled"
+                    className="btn btn-outline-dark ms-2"
                   >
-                    Registrar Reservaciones
+                    Reservaciones
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
-                    to="/EstadisticasEmpleado"
-                    className="link-unstyled"
+                    to="/login"
+                    className="btn btn-outline-dark ms-2"
                   >
-                    Estadísticas
+                    Iniciar sesión
                   </Nav.Link>
                 </Nav>
               </Navbar.Collapse>
@@ -125,17 +77,113 @@ function Header({ rol }) {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="flex-column">
+                <Nav.Link as={Link} to="/menucliente" className="link-unstyled">
+                  Menú
+                </Nav.Link>
+                <Nav.Link as={Link} to="/reservacion" className="link-unstyled">
+                  Reservaciones
+                </Nav.Link>
+                <Nav.Link as={Link} to="/login" className="link-unstyled">
+                  Iniciar sesión
+                </Nav.Link>
+              </Nav>
+            </Offcanvas.Body>
+          </Offcanvas>
+        </div>
+      )}
+      {rol === "Administrador" && (
+        <div>
+          <Navbar
+            className={`navbar-color-${rol.toLowerCase()}`}
+            variant="dark"
+            expand="md"
+            fixed="top"
+          >
+            <Container>
+              <Navbar.Brand href="#home">
+                <img src={logo} alt="Logo" className="brand-logo" />
+              </Navbar.Brand>
+              <Navbar.Toggle
+                aria-controls="basic-navbar-nav"
+                onClick={toggleMenu}
+                className="d-md-none d-block"
+              />
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="ml-auto">
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Inicio
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/menu"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Menú
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/empleado"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Empleado
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/categoria"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Registrar Categoría
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/reservacion"
+                    className="btn btn-outline-dark ms-2"
+                  >
+                    Registrar Reservaciones
+                  </Nav.Link>
+                  <NavDropdown title="Estadisticas" id="descuentos">
+  <NavDropdown.Item>
+    <Link to="/EstadisticasEmpleado" className="link-unstyled">Estadisticas Empleado</Link>
+  </NavDropdown.Item>
+  <NavDropdown.Item>
+    <Link to="/EstadisticasOrden" className="link-unstyled">Estadisticas Orden</Link>
+  </NavDropdown.Item>
+</NavDropdown>
+
+                  
+                  <Button
+                    variant="outline-light"
+                    onClick={handleLogout}
+                    className="ms-2"
+                  >
+                    <FaSignOutAlt /> Salir
+                  </Button>
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
+
+          <Offcanvas show={showMenu} onHide={toggleMenu} placement="start">
+            <Offcanvas.Header closeButton>
+              <Offcanvas.Title>Menú</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body>
+              <Nav className="flex-column">
                 <Nav.Link as={Link} to="/" className="link-unstyled">
                   Inicio
                 </Nav.Link>
                 <Nav.Link as={Link} to="/menu" className="link-unstyled">
-                  Menu
+                  Menú
                 </Nav.Link>
                 <Nav.Link as={Link} to="/empleado" className="link-unstyled">
                   Empleado
                 </Nav.Link>
                 <Nav.Link as={Link} to="/categoria" className="link-unstyled">
-                  Registrar Categoria
+                  Registrar Categoría
                 </Nav.Link>
                 <Nav.Link as={Link} to="/reservacion" className="link-unstyled">
                   Registrar Reservaciones
@@ -147,6 +195,13 @@ function Header({ rol }) {
                 >
                   Estadísticas
                 </Nav.Link>
+                <Button
+                  variant="outline-dark"
+                  onClick={handleLogout}
+                  className="w-100 mt-3"
+                >
+                  <FaSignOutAlt /> Salir
+                </Button>
               </Nav>
             </Offcanvas.Body>
           </Offcanvas>
@@ -155,11 +210,15 @@ function Header({ rol }) {
 
       {rol === "Mesero" && (
         <div>
-          <Navbar className="navbar-color" variant="dark" expand="md">
+          <Navbar
+            className={`navbar-color-${rol.toLowerCase()}`}
+            variant="dark"
+            expand="md"
+            fixed="top"
+          >
             <Container>
               <Navbar.Brand href="#home">
                 <img src={logo} alt="Logo" className="brand-logo" />
-                Mesero
               </Navbar.Brand>
               <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
@@ -168,22 +227,41 @@ function Header({ rol }) {
               />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
-                  <Nav.Link as={Link} to="/" className="link-unstyled">
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    className="btn btn-outline-dark ms-2"
+                  >
                     Inicio
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/tipoorden" className="link-unstyled">
+                  <Nav.Link
+                    as={Link}
+                    to="/tipoorden"
+                    className="btn btn-outline-dark ms-2"
+                  >
                     Registrar tipo de orden
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/orden" className="link-unstyled">
+                  <Nav.Link
+                    as={Link}
+                    to="/orden"
+                    className="btn btn-outline-dark ms-2"
+                  >
                     Registrar Orden
                   </Nav.Link>
                   <Nav.Link
                     as={Link}
                     to="/gestionOrden"
-                    className="link-unstyled"
+                    className="btn btn-outline-dark ms-2"
                   >
                     Gestion Orden
                   </Nav.Link>
+                  <Button
+                    variant="outline-light"
+                    onClick={handleLogout}
+                    className="ms-2"
+                  >
+                    <FaSignOutAlt /> Salir
+                  </Button>
                 </Nav>
               </Navbar.Collapse>
               <Button
@@ -213,6 +291,7 @@ function Header({ rol }) {
                 <Nav.Link as={Link} to="/orden" className="link-unstyled">
                   Registrar Orden
                 </Nav.Link>
+
                 <Nav.Link
                   as={Link}
                   to="/gestionOrden"
@@ -220,6 +299,13 @@ function Header({ rol }) {
                 >
                   Gestion Orden
                 </Nav.Link>
+                <Button
+                    variant="outline-light"
+                    onClick={handleLogout}
+                    className="ms-2"
+                  >
+                    <FaSignOutAlt /> Salir
+                  </Button>
               </Nav>
             </Offcanvas.Body>
           </Offcanvas>

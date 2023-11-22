@@ -1,14 +1,36 @@
-.navbar-color {
-  background-color: #361ccc;
+.navbar-color-cliente {
+  background-color: var(--cliente-navbar-bg);
+}
+
+.navbar-color-administrador {
+  background-color: var(--administrador-navbar-bg);
+}
+
+.navbar-color-mesero {
+  background-color: var(--mesero-navbar-bg);
+}
+
+.body-content {
+  padding-top: 70px; 
+}
+
+.mt-custom {
+  margin-top: 0px; /* Cambia 10px al valor deseado */
+}
+
+
+.navbar {
+  position: relative; 
+  z-index: 1000; 
 }
 
 .brand-logo {
-  height: 128px;
-  width: 128px;
+  height: 65px;
   object-fit: contain;
 }
+
 .nav-link {
-  margin-right: 15px; 
+  margin-right: 15px;
 }
 
 .link-unstyled {
@@ -18,7 +40,7 @@
 
 .nav-link .link-unstyled {
   display: block;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .nav-dropdown {
@@ -50,11 +72,11 @@
 }
 
 .nav-item-spacing .nav-link {
-  margin-right: 20px; 
+  margin-right: 20px;
 }
 
 @media (max-width: 991px) {
   .nav-link {
-    margin-right: 5px; 
+    margin-right: 5px;
   }
 }

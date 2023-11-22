@@ -142,9 +142,9 @@ function VisualizarReservacion() {
   };
 
   return (
-    <div className="body-content">
-    <Container className="mt-custom"> 
-        <Card className="mt-custom">
+    <div className=".body-content">
+      <Container className=".mt-custom">
+        <Card>
           <Card.Body>
             <Card.Title>Gestión de Reservaciones</Card.Title>
 

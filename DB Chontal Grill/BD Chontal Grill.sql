@@ -1,6 +1,5 @@
 USE chontal_grill;
 
-
 select * FROM `tipo_orden`;
 
 
@@ -49,6 +48,16 @@ CREATE TABLE `Orden` (
 
 
 
+CREATE TABLE `Tipo_Orden` (
+  `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
+  `Tipo` ENUM('Local', 'Domicilio'),
+  `Descripcion` VARCHAR(255),
+  `Nota_Especial` VARCHAR(200),
+  `Numero_Mesa` INT DEFAULT NULL,
+  `Direccion` VARCHAR(255) DEFAULT NULL
+);
+
+
 CREATE TABLE `Metodo de Pago` (
   `ID_Metodo_Pago` INT AUTO_INCREMENT PRIMARY KEY,
   `Descripcion` VARCHAR(100)
@@ -64,19 +73,6 @@ CREATE TABLE `Cliente` (
   `Contraseña` VARCHAR(50)
 );
 
-
-
-
-
-
-CREATE TABLE `Tipo_Orden` (
-  `Id_Tipo_Orden` INT AUTO_INCREMENT PRIMARY KEY,
-  `Tipo` ENUM('Local', 'Domicilio'),
-  `Descripcion` VARCHAR(255),
-  `Nota_Especial` VARCHAR(200),
-  `Numero_Mesa` INT DEFAULT NULL,
-  `Direccion` VARCHAR(255) DEFAULT NULL
-);
 
 
 CREATE TABLE `Empleado` (

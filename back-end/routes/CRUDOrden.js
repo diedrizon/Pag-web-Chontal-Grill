@@ -122,5 +122,45 @@ module.exports = (db) => {
     });
   });
 
+
+
+
+
+
+
+
+
+  router.get("/readOrden", (req, res) => {
+    const sql = `SELECT 
+        o.ID_Orden,
+        c.ID_Cliente,
+        e.ID_Empleado,
+        t.Id_Tipo_Orden,
+        o.Monto,
+        o.Estado,
+        o.Fecha_Hora,
+        mp.ID_Metodo_Pago,
+        CONCAT(c.Nombres, ' ', c.Apellidos) AS Cliente,
+        CONCAT(e.Nombres, ' ', e.Apellidos) AS Empleado,
+        COALESCE(t.Tipo, 'Sin especificar') AS TipoOrden,
+        COALESCE(mp.Descripcion, 'Sin método de pago') AS MetodoPago
+      FROM Orden o
+      LEFT JOIN Cliente c ON o.ID_Cliente = c.ID_Cliente
+      LEFT JOIN Empleado e ON o.ID_Empleado = e.ID_Empleado
+      LEFT JOIN Tipo_Orden t ON o.Id_Tipo_Orden = t.Id_Tipo_Orden
+      LEFT JOIN \`Metodo de Pago\` mp ON o.ID_Metodo_Pago = mp.ID_Metodo_Pago
+      WHERE MONTH(o.Fecha_Hora) = MONTH(CURRENT_DATE()) AND YEAR(o.Fecha_Hora) = YEAR(CURRENT_DATE())`;
+  
+    db.query(sql, (err, result) => {
+      if (err) {
+        console.error("Error al leer órdenes:", err);
+        res.status(500).json({ error: "Error al leer órdenes" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  });
+  
+
   return router;
 };
