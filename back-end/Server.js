@@ -11,8 +11,8 @@ const port = 5000;
 // Configuración de la conexión a la base de datos
 const db = mysql.createConnection({
     host: "localhost",
-    user: "webapp",
-    password: "Fargas2004",
+    user: "root",
+    password: "1234",
     database: "chontal_grill",
 });
 
